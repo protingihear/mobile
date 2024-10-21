@@ -50,7 +50,7 @@ android {
 
 // Add TensorFlow Lite dependency
 dependencies {
-    compile 'org.tensorflow:tensorflow-lite:+' // Adjust this version as necessary
+
     implementation 'org.tensorflow:tensorflow-lite-gpu:+' // Optional: If you need GPU support
 }
 

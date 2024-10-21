@@ -29,7 +29,7 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _transcription = "";
-  double _waveformAmplitude = 0.0; // Amplitude for waveform
+  double _waveformAmplitude = 0.0; 
 
   @override
   void initState() {

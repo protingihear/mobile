@@ -9,9 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: ^0.8.5+3  # For picking images from the camera
-  tflite: ^1.1.2 # or the latest version
   flutter_tts: ^3.4.0     # For text-to-speech functionality
-  tflite_flutter: ^0.9.0  # Check for the latest version
   speech_to_text: ^7.0.0   # For voice-to-text functionality
   permission_handler: ^10.2.0 # or the latest version
 
