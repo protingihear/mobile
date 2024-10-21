@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'voice_to_text.dart';
-import 'image_to_text.dart';
+import 'image_to_text.dart'; // Import the Image to Text screen
 
 void main() {
   runApp(MyApp());
@@ -42,11 +42,21 @@ class HomeScreen extends StatelessWidget {
               child: Text('Voice to Text'),
             ),
             SizedBox(height: 20), // Add some spacing between buttons
-            
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to Image to Text Screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RealTimeOCRScreen()),
+                );
+              },
+              child: Text('Image to Text'),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
 

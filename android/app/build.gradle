@@ -51,7 +51,7 @@ android {
 // Add TensorFlow Lite dependency
 dependencies {
 
-    implementation 'org.tensorflow:tensorflow-lite-gpu:+' // Optional: If you need GPU support
+  implementation 'org.tensorflow:tensorflow-lite:+' 
 }
 
 flutter {
