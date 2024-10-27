@@ -1,4 +1,4 @@
-package com.example.niggerracing
+package com.example.mediapipe
 
 import android.content.Context
 import android.graphics.Canvas

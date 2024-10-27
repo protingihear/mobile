@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         app:scaleType="fillStart" />
 
-    <com.example.niggerracing.OverlayView
+    <com.example.mediapipe.OverlayView
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.niggerracing.fragment
+package com.example.mediapipe.fragment
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -33,10 +33,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.niggerracing.GestureRecognizerHelper
-import com.example.niggerracing.MainViewModel
-import com.example.niggerracing.databinding.FragmentGalleryBinding
-import com.example.niggerracing.OverlayView
+import com.example.mediapipe.GestureRecognizerHelper
+import com.example.mediapipe.MainViewModel
+import com.example.mediapipe.databinding.FragmentGalleryBinding
+import com.example.mediapipe.OverlayView
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.*
 import java.util.concurrent.Executors

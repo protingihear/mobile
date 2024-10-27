@@ -1,4 +1,4 @@
-package com.example.niggerracing.fragment
+package com.example.mediapipe.fragment
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -16,10 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.niggerracing.GestureRecognizerHelper
-import com.example.niggerracing.MainViewModel
-import com.example.niggerracing.R
-import com.example.niggerracing.databinding.FragmentCameraBinding
+import com.example.mediapipe.GestureRecognizerHelper
+import com.example.mediapipe.MainViewModel
+import com.example.mediapipe.R
+import com.example.mediapipe.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.*
 import java.util.concurrent.ExecutorService

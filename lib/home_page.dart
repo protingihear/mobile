@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class HomePage extends StatelessWidget {
-  static const platform = MethodChannel('com.example.niggerracing/channel');
+  static const platform = MethodChannel('com.example.mediapipe/channel');
 
   void _launchNativeScreen() async {
     try {

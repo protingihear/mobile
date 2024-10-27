@@ -1,11 +1,11 @@
-package com.example.niggerracing
+package com.example.mediapipe
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.niggerracing.databinding.ActivityNativePageBinding
+import com.example.mediapipe.databinding.ActivityNativePageBinding
 
 class NativePageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNativePageBinding

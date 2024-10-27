@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.niggerracing.fragment
+package com.example.mediapipe.fragment
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.niggerracing.databinding.ItemGestureRecognizerResultBinding
+import com.example.mediapipe.databinding.ItemGestureRecognizerResultBinding
 import com.google.mediapipe.tasks.components.containers.Category
 import java.util.Locale
 import kotlin.math.min

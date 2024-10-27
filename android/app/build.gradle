@@ -6,14 +6,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.niggerracing"
+    namespace = "com.example.mediapipe"
     compileSdk = 34
     ndkVersion = flutter.ndkVersion
     viewBinding{
         enabled = true
     }
     defaultConfig {
-        applicationId = "com.example.niggerracing"
+        applicationId = "com.example.mediapipe"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
