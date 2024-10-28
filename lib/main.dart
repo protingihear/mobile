@@ -1,5 +1,6 @@
 import 'package:bisadenger/home_page.dart';
 import 'package:flutter/material.dart';
+import 'profile.dart';
 import 'voice_to_text.dart';
 import 'image_to_text.dart'; // Import the Image to Text screen
 
@@ -63,6 +64,16 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: Text('Image to Text'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: Text('Profile Page'),
             ),
           ],
         ),
