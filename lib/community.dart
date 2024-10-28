@@ -9,6 +9,24 @@ class CommunityPage extends StatefulWidget {
 }
 
 class _CommunityPageState extends State<CommunityPage> {
+  final List<Map<String, dynamic>> posts = [
+    {
+      "name": "Yazid Al Adnan",
+      "content":
+          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
+      "likes": 10,
+      "comments": 2
+    },
+    {
+      "name": "Yazid Al Adnan",
+      "content":
+          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
+      "likes": 15,
+      "comments": 3
+    },
+    // Add more posts if needed
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,41 +152,115 @@ class _CommunityPageState extends State<CommunityPage> {
                 endIndent: 1,
               ),
 
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
-                    color: Colors.red,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: 152,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFDEF5E4),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20, left: 20),
-                            child: CircleAvatar(
-                              backgroundColor: Color(0xFFED9A82),
-                              radius: 20,
-                              child: IconButton(
-                                icon: const Icon(Icons.person),
-                                onPressed: () {
-                                  // Add functionality here
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              )
+              // ListView(
+              //   children: [Text("Tes")],
+              // )
+
+              PostList(),
+
+              // OLD CONTAINER
+
+              // Stack(
+              //   children: [
+              //     Container(
+              //       margin: EdgeInsets.only(top: 10),
+              //       width: MediaQuery.of(context).size.width,
+              //       height: 300,
+              //     ),
+              //     Positioned(
+              //       top: 20, // Atur posisi vertikalnya sesuai kebutuhan
+              //       left: 20, // Atur posisi horizontalnya sesuai kebutuhan
+              //       child: Container(
+              //         width: MediaQuery.of(context).size.width *
+              //             0.9, // Ukuran lebih besar dari container merah
+              //         height: 152, // Sesuaikan tinggi yang diinginkan
+              //         decoration: BoxDecoration(
+              //           color: Color(0xFFDEF5E4),
+              //           borderRadius: BorderRadius.circular(16),
+              //         ),
+              //         child: Column(
+              //           children: [
+              //             // PROFILE USER
+              //             Row(
+              //               children: [
+              //                 CircleAvatar(
+              //                   backgroundColor: Color(0xFFED9A82),
+              //                   radius: 20,
+              //                   child: IconButton(
+              //                     icon: const Icon(Icons.person),
+              //                     onPressed: () {
+              //                       // Add functionality here
+              //                     },
+              //                   ),
+              //                 ),
+              //                 Text("Yazid Al Adnan")
+              //               ],
+              //             ),
+              //             // ISI CONTENT
+              //             Text(
+              //                 "Hari ini saya telah belajar gerkan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh."),
+              //             // ACTION MENU POSTINGAN
+              //             Row(
+              //               children: [
+              //                 LikeButton(),
+              //                 Text("10"),
+              //                 IconButton(
+              //                   icon: Icon(Icons.insert_comment_rounded),
+              //                   color: Color(0xFF175260),
+              //                   onPressed: () {},
+              //                 ),
+              //                 Text("2"),
+              //                 IconButton(
+              //                   icon: Icon(Icons.upload),
+              //                   color: Color(0xFF175260),
+              //                   onPressed: () {},
+              //                 ),
+              //               ],
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // )
+
+              // OLD CONTAINER
+
+              // Column(
+              //   children: [
+              //     Container(
+              //       margin: EdgeInsets.only(top: 20),
+              //       width: MediaQuery.of(context).size.width,
+              //       height: 300,
+              //       color: Colors.red,
+              //       child: Container(
+              //         width: MediaQuery.of(context).size.width * 0.8,
+              //         height: 152,
+              //         decoration: BoxDecoration(
+              //           color: Color(0xFFDEF5E4),
+              //           borderRadius: BorderRadius.circular(16),
+              //         ),
+              //         child: Row(
+              //           children: [
+              //             Padding(
+              //               padding: const EdgeInsets.only(top: 20, left: 20),
+              //               child: CircleAvatar(
+              //                 backgroundColor: Color(0xFFED9A82),
+              //                 radius: 20,
+              //                 child: IconButton(
+              //                   icon: const Icon(Icons.person),
+              //                   onPressed: () {
+              //                     // Add functionality here
+              //                   },
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // )
             ],
           ),
         ),
@@ -176,7 +268,7 @@ class _CommunityPageState extends State<CommunityPage> {
     );
   }
 
-  // Menu Community
+// Menu Community
   Widget _buildCommunityCard(String judul, String imagePath) {
     return Container(
       width: 135,
@@ -217,6 +309,7 @@ class _CommunityPageState extends State<CommunityPage> {
   }
 }
 
+// MENU RELATIONS
 class ButtonRelations extends StatelessWidget {
   // const ButtonRelations({super.key});
   final IconData icon;
@@ -259,6 +352,120 @@ class ButtonRelations extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+// STF LikeButton
+class LikeButton extends StatefulWidget {
+  const LikeButton({super.key});
+
+  @override
+  State<LikeButton> createState() => _LikeButtonState();
+}
+
+class _LikeButtonState extends State<LikeButton> {
+  bool isFavorite = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        isFavorite ? Icons.favorite : Icons.favorite_border,
+        color: Color(0xFF175260),
+      ),
+      onPressed: () {
+        setState(() {
+          isFavorite = !isFavorite;
+        });
+      },
+    );
+  }
+}
+
+class PostList extends StatelessWidget {
+  final List<Map<String, dynamic>> posts = [
+    {
+      "name": "Yazid Al Adnan",
+      "content":
+          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
+      "likes": 10,
+      "comments": 2
+    },
+    {
+      "name": "Yazid Al Adnan",
+      "content":
+          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
+      "likes": 15,
+      "comments": 3
+    },
+    {
+      "name": "Yazid Al Adnan",
+      "content":
+          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
+      "likes": 15,
+      "comments": 3
+    },
+    // Add more posts if needed
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.all(20),
+      itemCount: posts.length,
+      itemBuilder: (context, index) {
+        final post = posts[index];
+        return Card(
+          margin: EdgeInsets.symmetric(vertical: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          color: Color(0xFFDEF5E4),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Color(0xFFED9A82),
+                      radius: 20,
+                      child: Icon(Icons.person, color: Colors.white),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      post["name"],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text(post["content"]),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Icon(Icons.favorite, color: Colors.green),
+                    SizedBox(width: 5),
+                    Text(post["likes"].toString()),
+                    SizedBox(width: 20),
+                    Icon(Icons.comment, color: Colors.green),
+                    SizedBox(width: 5),
+                    Text(post["comments"].toString()),
+                    SizedBox(width: 20),
+                    Icon(Icons.share, color: Colors.green),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
