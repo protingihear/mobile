@@ -1,3 +1,4 @@
+import 'package:bisadenger/home_page.dart';
 import 'package:flutter/material.dart';
 import 'voice_to_text.dart';
 import 'image_to_text.dart'; // Import the Image to Text screen
@@ -41,13 +42,24 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Voice to Text'),
             ),
-            SizedBox(height: 20), // Add some spacing between buttons
+            /*SizedBox(height: 20), // Add some spacing between buttons
             ElevatedButton(
               onPressed: () {
                 // Navigate to Image to Text Screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => RealTimeOCRScreen()),
+                );
+              },
+              child: Text('Image to Text'),
+            ),*/
+             SizedBox(height: 20), // Add some spacing between buttons
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to Image to Text Screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 );
               },
               child: Text('Image to Text'),
