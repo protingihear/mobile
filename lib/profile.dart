@@ -1,17 +1,22 @@
 // profile.dart
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserProfile {
   String name;
   String bio;
   String imageUrl;
   List<String> emails;
+  String gender;
 
   UserProfile({
     required this.name,
     required this.bio,
     required this.imageUrl,
     required this.emails,
+    required this.gender,
   });
 }
 
@@ -24,6 +29,7 @@ Future<UserProfile> fetchUserProfile() async {
     bio: '"Tetap Semangat"',
     imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo3Tluvszvh74irLX8BNvpIWXCdrPk5cjZ2Q&s',
     emails: ['naraya@gmail.com', 'naraya2@gmail.com'],
+    gender: 'Perempuan', 
   );
 }
 
@@ -119,10 +125,12 @@ class ProfileHeader extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   profile.bio,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Gender: ${profile.gender}',
+                  style: const TextStyle(color: Colors.black54, fontSize: 14),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
@@ -139,9 +147,7 @@ class ProfileHeader extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue.shade100,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                   child: const Center(
@@ -329,12 +335,14 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController nameController;
   late TextEditingController bioController;
+  String? selectedGender;
 
   @override
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.profile.name);
     bioController = TextEditingController(text: widget.profile.bio);
+    selectedGender = widget.profile.gender;
   }
 
   @override
@@ -347,45 +355,65 @@ class _EditProfilePageState extends State<EditProfilePage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
-              ),
+              decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: bioController,
-              decoration: const InputDecoration(
-                labelText: 'Bio',
-                border: OutlineInputBorder(),
-              ),
+              decoration: const InputDecoration(labelText: 'Bio', border: OutlineInputBorder()),
             ),
-            const SizedBox(height: 32),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(
-                    context,
-                    UserProfile(
-                      name: nameController.text,
-                      bio: bioController.text,
-                      imageUrl: widget.profile.imageUrl,
-                      emails: widget.profile.emails,
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Text("Gender: "),
+                Expanded(
+                  child: RadioListTile<String>(
+                    title: const Text('Perempuan'),
+                    value: 'Perempuan',
+                    groupValue: selectedGender,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGender = value;
+                      });
+                    },
                   ),
                 ),
-                child: const Text('Save'),
+                Expanded(
+                  child: RadioListTile<String>(
+                    title: const Text('Laki-Laki'),
+                    value: 'Laki-Laki',
+                    groupValue: selectedGender,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGender = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  UserProfile(
+                    name: nameController.text,
+                    bio: bioController.text,
+                    imageUrl: widget.profile.imageUrl,
+                    emails: widget.profile.emails,
+                    gender: selectedGender ?? widget.profile.gender,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),
+              child: const Text('Save'),
             ),
           ],
         ),
