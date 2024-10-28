@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -9,24 +8,6 @@ class CommunityPage extends StatefulWidget {
 }
 
 class _CommunityPageState extends State<CommunityPage> {
-  final List<Map<String, dynamic>> posts = [
-    {
-      "name": "Yazid Al Adnan",
-      "content":
-          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
-      "likes": 10,
-      "comments": 2
-    },
-    {
-      "name": "Yazid Al Adnan",
-      "content":
-          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
-      "likes": 15,
-      "comments": 3
-    },
-    // Add more posts if needed
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,27 +105,57 @@ class _CommunityPageState extends State<CommunityPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ButtonRelations(
-                        icon: Icons.group,
-                        label: 'Community',
-                        color: Color(0xFF499CB1),
-                        iconColor: Colors.white,
-                        BgColor: Color(0xFF195728),
+                      InkWell(
+                        child: ButtonRelations(
+                          icon: Icons.group,
+                          label: 'Community',
+                          color: Color(0xFF499CB1),
+                          iconColor: Colors.white,
+                          BgColor: Color(0xFF195728),
+                        ),
+                        onTap: () {},
                       ),
-                      SizedBox(width: 20),
-                      ButtonRelations(
-                        icon: Icons.person,
-                        label: 'My Activity',
-                        color: Color(0xFF8EC5D2),
-                        iconColor: Color(0xFF195728),
-                        BgColor: Color(0xFFBAE1C4),
+                      const SizedBox(width: 20),
+                      InkWell(
+                        child: ButtonRelations(
+                          icon: Icons.person,
+                          label: 'My Activity',
+                          color: Color(0xFF8EC5D2),
+                          iconColor: Color(0xFF195728),
+                          BgColor: Color(0xFFBAE1C4),
+                        ),
+                        onTap: () {},
                       ),
                     ],
                   ),
                 ),
               ),
 
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Icon(
+                      Icons.add,
+                      size: 30,
+                    ),
+                    Icon(
+                      Icons.chat,
+                      size: 30,
+                    ),
+                    Icon(
+                      Icons.notification_add,
+                      size: 30,
+                    )
+                  ],
+                ),
+              ),
+
               // Garis pemisah laman menu Button Community dan Menu MyActivity
+              const SizedBox(
+                height: 5,
+              ),
               const Divider(
                 color: Colors.grey,
                 thickness: 1,
@@ -152,14 +163,16 @@ class _CommunityPageState extends State<CommunityPage> {
                 endIndent: 1,
               ),
 
-              // ListView(
-              //   children: [Text("Tes")],
-              // )
+              BaganAktivitas(),
 
-              PostList(),
+              // pilihanMenu(choose: "COMMUNITY"),
+
+              // Isi Konten Button Communtiy
+              // PostList(),
+
+              // Isi Konten MyActivity
 
               // OLD CONTAINER
-
               // Stack(
               //   children: [
               //     Container(
@@ -225,7 +238,6 @@ class _CommunityPageState extends State<CommunityPage> {
               // )
 
               // OLD CONTAINER
-
               // Column(
               //   children: [
               //     Container(
@@ -339,8 +351,10 @@ class ButtonRelations extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(label,
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15)),
         ),
         Positioned(
           top: -13,
@@ -409,56 +423,58 @@ class PostList extends StatelessWidget {
     // Add more posts if needed
   ];
 
+  PostList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       itemCount: posts.length,
       itemBuilder: (context, index) {
         final post = posts[index];
         return Card(
-          margin: EdgeInsets.symmetric(vertical: 8),
+          margin: const EdgeInsets.symmetric(vertical: 8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          color: Color(0xFFDEF5E4),
+          color: const Color(0xFFDEF5E4),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundColor: Color(0xFFED9A82),
                       radius: 20,
                       child: Icon(Icons.person, color: Colors.white),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(
                       post["name"],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(post["content"]),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   children: [
-                    Icon(Icons.favorite, color: Colors.green),
-                    SizedBox(width: 5),
+                    const Icon(Icons.favorite, color: Colors.green),
+                    const SizedBox(width: 5),
                     Text(post["likes"].toString()),
-                    SizedBox(width: 20),
-                    Icon(Icons.comment, color: Colors.green),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 20),
+                    const Icon(Icons.comment, color: Colors.green),
+                    const SizedBox(width: 5),
                     Text(post["comments"].toString()),
-                    SizedBox(width: 20),
-                    Icon(Icons.share, color: Colors.green),
+                    const SizedBox(width: 20),
+                    const Icon(Icons.share, color: Colors.green),
                   ],
                 ),
               ],
@@ -466,6 +482,84 @@ class PostList extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class pilihanMenu extends StatelessWidget {
+  final String choose;
+
+  pilihanMenu({required this.choose});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ButtonRelations(
+              icon: Icons.group,
+              label: 'Community',
+              color: Color(0xFF499CB1),
+              iconColor: Colors.white,
+              BgColor: Color(0xFF195728),
+            ),
+            const SizedBox(width: 20),
+            ButtonRelations(
+              icon: Icons.person,
+              label: 'My Activity',
+              color: Color(0xFF8EC5D2),
+              iconColor: Color(0xFF195728),
+              BgColor: Color(0xFFBAE1C4),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class BaganAktivitas extends StatelessWidget {
+  const BaganAktivitas({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 300,
+      child: Column(
+        children: [
+          SizedBox(height: 40),
+          const Text(
+            "Bagi Aktivitas Kamu",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontFamily: 'Poppins'),
+          ),
+          SizedBox(height: 25),
+          const Text(
+              "Saat anda membagikan postingan, akan muncul di aktivitas anda",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Poppins',
+                  color: Color(0xFFBABABA)))
+        ],
+      ),
     );
   }
 }
