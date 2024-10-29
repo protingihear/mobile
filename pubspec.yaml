@@ -29,3 +29,6 @@ flutter:
   assets:
     - assets/hand_gesture_model.tflite
     - assets/labels.txt
+    - assets/images/arrow-right.png
+    - assets/images/Icon.png
+    - assets/images/Logo_IHear.png

@@ -1,4 +1,5 @@
 import 'package:bisadenger/home_page.dart';
+import 'package:bisadenger/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'voice_to_text.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: Sign_In_Page(),
     );
   }
 }
