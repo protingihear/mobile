@@ -91,7 +91,7 @@ class _HomepageState extends State<Homepage> {
                     // Text Section
                     Container(
                        width: double.infinity,
-                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15), // Tambahkan padding kiri
+                       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10), // Tambahkan padding kiri
                         child: Text(
                            "Selamat Datang Naraya\nYuk Jelajahi Dunia Tuli Bersama!",
                         textAlign: TextAlign.left,
@@ -108,6 +108,7 @@ class _HomepageState extends State<Homepage> {
                           child: Container(
                           width: 150,
                           height: 200,
+                          color: Colors.blue,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -121,7 +122,56 @@ class _HomepageState extends State<Homepage> {
                            ),
                           ),
                         ),
+                         Card(
+                          child: Container(
+                          width: 150,
+                          height: 200,
+                          color: Colors.blue,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRQQwAWE_WeHcrXdcl8IXtl8QrYap3ttMJZn_CCrraesoLpx2-S",
+                                width: 100,
+                                height: 100, 
+                                fit: BoxFit.cover, 
+                              ),
+                            ],
+                           ),
+                          ),
+                        ),
+                         Card(
+                          child: Container(
+                          width: 150,
+                          height: 200,
+                          color: Colors.blue,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRZHtj9-EVnSz4Im3Cpyks3ZBl5NwOVTm0l5lbcjzvdnjAFwYop",
+                                width: 100,
+                                height: 100, 
+                                fit: BoxFit.cover, 
+                              ),
+                            ],
+                           ),
+                          ),
+                        ),
                       ],
+                    ),
+                     Container(
+                       width: double.infinity,
+                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15), // Tambahkan padding kiri
+                        child: Text(
+                           "Information",
+                        textAlign: TextAlign.left,
+                          style: GoogleFonts.montserrat(
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                        ),
+                      ),
                     ),
                   ],
                 ),
