@@ -163,10 +163,14 @@ class _CommunityPageState extends State<CommunityPage> {
                 endIndent: 1,
               ),
 
-              // SUb Page Relasi
-              SubPageRelasi(),
-
+              // SUb Page Aktivitas
               // BaganAktivitas(),
+
+              // SUb Page Relasi
+              // SubPageRelasi(),
+
+              // Sub Page Notifikasi
+              SubPageNotification(),
 
               // pilihanMenu(choose: "COMMUNITY"),
 
@@ -565,6 +569,7 @@ class SubPageRelasi extends StatelessWidget {
   }
 }
 
+// SUB PAGE AKTIVITAS
 class BaganAktivitas extends StatelessWidget {
   const BaganAktivitas({super.key});
 
@@ -591,6 +596,44 @@ class BaganAktivitas extends StatelessWidget {
                   fontSize: 20,
                   fontFamily: 'Poppins',
                   color: Color(0xFFBABABA)))
+        ],
+      ),
+    );
+  }
+}
+
+// SUB PAGE NOTIFIKASI
+class SubPageNotification extends StatelessWidget {
+  const SubPageNotification({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 300,
+      child: Column(
+        children: [
+          SizedBox(height: 40),
+          SizedBox(
+            width: 250,
+            height: 100,
+            child: const Text(
+              "Belum ada notifikasi untuk kamu!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  fontFamily: 'Poppins'),
+            ),
+          ),
+          SizedBox(height: 25),
+          // const Text(
+          //     "Saat anda membagikan postingan, akan muncul di aktivitas anda",
+          //     textAlign: TextAlign.center,
+          //     style: TextStyle(
+          //         fontSize: 20,
+          //         fontFamily: 'Poppins',
+          //         color: Color(0xFFBABABA)))
         ],
       ),
     );
