@@ -163,7 +163,10 @@ class _CommunityPageState extends State<CommunityPage> {
                 endIndent: 1,
               ),
 
-              BaganAktivitas(),
+              // SUb Page Relasi
+              SubPageRelasi(),
+
+              // BaganAktivitas(),
 
               // pilihanMenu(choose: "COMMUNITY"),
 
@@ -370,7 +373,7 @@ class ButtonRelations extends StatelessWidget {
   }
 }
 
-// STF LikeButton
+// LikeButton
 class LikeButton extends StatefulWidget {
   const LikeButton({super.key});
 
@@ -397,6 +400,7 @@ class _LikeButtonState extends State<LikeButton> {
   }
 }
 
+// SUB PAGE COMMUNITY
 class PostList extends StatelessWidget {
   final List<Map<String, dynamic>> posts = [
     {
@@ -486,6 +490,7 @@ class PostList extends StatelessWidget {
   }
 }
 
+// BELUM FIX
 class pilihanMenu extends StatelessWidget {
   final String choose;
 
@@ -523,12 +528,40 @@ class pilihanMenu extends StatelessWidget {
   }
 }
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+// SUB PAGE RELASI / CHAT
+class SubPageRelasi extends StatelessWidget {
+  const SubPageRelasi({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 300,
+      child: Column(
+        children: [
+          SizedBox(height: 40),
+          const Text(
+            "Tambah Relasi Kamu!",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontFamily: 'Poppins'),
+          ),
+          SizedBox(height: 25),
+          SizedBox(
+            width: 300,
+            height: 200,
+            child: const Text(
+                "Saat anda bertukar pesan, akan muncul di aktivitas pesan anda",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Poppins',
+                    color: Color(0xFFBABABA))),
+          )
+        ],
+      ),
+    );
   }
 }
 
