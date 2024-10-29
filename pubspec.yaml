@@ -12,12 +12,14 @@ dependencies:
   flutter_tts: ^3.4.0     # For text-to-speech functionality
   speech_to_text: ^7.0.0   # For voice-to-text functionality
   permission_handler: ^10.2.0 # or the latest version
-  camera: ^0.10.1
-  image: ^3.0.1 # For image processing if necessary
-  tflite: ^1.1.2
-  tflite_flutter: ^0.9.0  # TensorFlow Lite plugin
-  google_mlkit_pose_detection: ^0.3.0  # Add the ML Kit dependency
-  tflite_flutter_helper: ^0.2.0  # For preprocessing
+  #camera: ^0.10.1
+  #image: ^3.0.1 # For image processing if necessary
+  #tflite: ^1.1.2
+  #tflite_flutter: ^0.9.0  # TensorFlow Lite plugin
+  #google_mlkit_pose_detection: ^0.3.0  # Add the ML Kit dependency
+  #tflite_flutter_helper: ^0.2.0  # For preprocessing
+  flutter_test:
+    sdk: flutter
 
 # The following section is specific to Flutter
 flutter:
