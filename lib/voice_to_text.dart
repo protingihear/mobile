@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-//import 'dart:math';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +9,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Demo Suara ke Teks',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -29,7 +27,7 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _transcription = "";
-  double _waveformAmplitude = 0.0; 
+  double _waveformAmplitude = 0.0;
 
   @override
   void initState() {
@@ -39,26 +37,24 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
 
   void _startListening() async {
     _isListening = true;
-    _transcription = ""; // Clear text at the start of listening
+    _transcription = "";
     setState(() {});
 
-    // Initialize speech recognition with Bahasa Indonesia locale
     bool available = await _speech.initialize(
       onStatus: (val) => print('Status: $val'),
       onError: (val) => print('Error: $val'),
-      debugLogging: true, // Optional for debugging
+      debugLogging: true,
     );
 
     if (available) {
-      // Listen for Bahasa Indonesia
       _speech.listen(
         onResult: (val) {
           setState(() {
-            _transcription = val.recognizedWords; // Update transcription
-            _waveformAmplitude = val.hasConfidenceRating ? val.confidence : 0.0; // Use confidence to change amplitude
+            _transcription = val.recognizedWords;
+            _waveformAmplitude = val.hasConfidenceRating ? val.confidence : 0.0;
           });
         },
-        localeId: 'id_ID', // Set locale to Bahasa Indonesia
+        localeId: 'id_ID',
       );
     } else {
       print("Pengakuan suara tidak tersedia.");
@@ -68,8 +64,8 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   void _stopListening() async {
     _isListening = false;
     setState(() {
-      _transcription = ""; // Clear text after stopping listening
-      _waveformAmplitude = 0.0; // Reset amplitude
+      _transcription = "";
+      _waveformAmplitude = 0.0;
     });
     await _speech.stop();
   }
@@ -82,7 +78,7 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop(); // Handle back navigation
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -90,7 +86,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Display a title based on listening status
             Text(
               _isListening ? 'Mendengarkan...' : 'Mulai menerjemahkan',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -110,10 +105,8 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
               ),
             ),
             SizedBox(height: 20),
-            // Dynamic waveform representation
             _isListening ? Waveform(amplitude: _waveformAmplitude) : SizedBox.shrink(),
             SizedBox(height: 20),
-            // Listening button with dynamic color based on listening state
             ElevatedButton(
               onPressed: _isListening ? _stopListening : _startListening,
               style: ElevatedButton.styleFrom(
@@ -136,7 +129,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   }
 }
 
-// Simple Waveform Widget
 class Waveform extends StatelessWidget {
   final double amplitude;
 
@@ -165,15 +157,14 @@ class WaveformPainter extends CustomPainter {
       ..color = Colors.grey
       ..style = PaintingStyle.fill;
 
-    // Draw dynamic waveform based on amplitude
     for (int i = 0; i < size.width.toInt(); i += 5) {
-      double height = (size.height / 2) + (amplitude * 20 * (0.5 - (i / size.width))); // Change height based on amplitude
+      double height = (size.height / 2) + (amplitude * 20 * (0.5 - (i / size.width)));
       canvas.drawLine(Offset(i.toDouble(), size.height), Offset(i.toDouble(), height), paint);
     }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true; // Repaint every frame for dynamic effect
+    return true;
   }
 }
