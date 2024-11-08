@@ -97,7 +97,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 ),
               ),
 
-              // Button Community dan Menu MyActivity
+              // Button Community dan Menu MyActivity (BELUM FIX)
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Container(
@@ -132,6 +132,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 ),
               ),
 
+              // ACTION BUTTON SUB PAGE
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Row(
@@ -168,10 +169,10 @@ class _CommunityPageState extends State<CommunityPage> {
               // BaganAktivitas(),
 
               // SUb Page Relasi
-              // SubPageRelasi(),
+              SubPageRelasi(),
 
               // Sub Page Notifikasi
-              SubPageNotification(),
+              // SubPageNotification(),
 
               // pilihanMenu(choose: "COMMUNITY"),
 
@@ -533,44 +534,47 @@ class pilihanMenu extends StatelessWidget {
   }
 }
 
-// SUB PAGE RELASI / CHAT
+// SUB PAGE RELASI / CHAT (BELUM FIX)
 class SubPageRelasi extends StatelessWidget {
   const SubPageRelasi({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 300,
-      child: Column(
-        children: [
-          SizedBox(height: 40),
-          const Text(
-            "Tambah Relasi Kamu!",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                fontFamily: 'Poppins'),
-          ),
-          SizedBox(height: 25),
-          SizedBox(
-            width: 300,
-            height: 200,
-            child: const Text(
-                "Saat anda bertukar pesan, akan muncul di aktivitas pesan anda",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'Poppins',
-                    color: Color(0xFFBABABA))),
-          )
-        ],
-      ),
-    );
+    return Placeholder();
+
+    // JIKA BELUM ADA CHATINGAN
+    // Container(
+    //   width: MediaQuery.of(context).size.width,
+    //   height: 300,
+    //   child: Column(
+    //     children: [
+    //       SizedBox(height: 40),
+    //       const Text(
+    //         "Tambah Relasi Kamu!",
+    //         style: TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //             fontSize: 20,
+    //             fontFamily: 'Poppins'),
+    //       ),
+    //       SizedBox(height: 25),
+    //       SizedBox(
+    //         width: 300,
+    //         height: 200,
+    //         child: const Text(
+    //             "Saat anda bertukar pesan, akan muncul di aktivitas pesan anda",
+    //             textAlign: TextAlign.center,
+    //             style: TextStyle(
+    //                 fontSize: 20,
+    //                 fontFamily: 'Poppins',
+    //                 color: Color(0xFFBABABA))),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 }
 
-// SUB PAGE AKTIVITAS
+// SUB PAGE AKTIVITAS (BELUM FIX)
 class BaganAktivitas extends StatelessWidget {
   const BaganAktivitas({super.key});
 
@@ -603,7 +607,7 @@ class BaganAktivitas extends StatelessWidget {
   }
 }
 
-// SUB PAGE NOTIFIKASI
+// SUB PAGE NOTIFIKASI (BELUM FIX)
 class SubPageNotification extends StatelessWidget {
   const SubPageNotification({super.key});
 
