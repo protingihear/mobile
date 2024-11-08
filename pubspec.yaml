@@ -32,3 +32,9 @@ flutter:
     - assets/images/arrow-right.png
     - assets/images/Icon.png
     - assets/images/Logo_IHear.png
+    - assets/imagesComm/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: font/Poppins/Poppins-Bold.ttf  

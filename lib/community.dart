@@ -86,12 +86,12 @@ class _CommunityPageState extends State<CommunityPage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildCommunityCard(
-                          'Komunitas Harmoni', 'images/ilustrasi1.png'),
-                      _buildCommunityCard(
-                          'Komunitas Isyarat Kita', 'images/ilustrasi2.png'),
-                      _buildCommunityCard(
-                          'Komunitas Kita Isyarat', 'images/ilustrasi1.png'),
+                      _buildCommunityCard('Komunitas Harmoni',
+                          'assets/imagesComm/ilustrasi1.png'),
+                      _buildCommunityCard('Komunitas Isyarat Kita',
+                          'assets/imagesComm/ilustrasi2.png'),
+                      _buildCommunityCard('Komunitas Kita Isyarat',
+                          'assets/imagesComm/ilustrasi1.png'),
                     ],
                   ),
                 ),
