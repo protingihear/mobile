@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'voice_to_text.dart';
 import 'image_to_text.dart'; // Import the Image to Text screen
+import 'community.dart';
 
 void main() {
   runApp(MyApp());
@@ -55,7 +56,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Image to Text'),
             ),*/
-             SizedBox(height: 20), // Add some spacing between buttons
+            SizedBox(height: 20), // Add some spacing between buttons
             ElevatedButton(
               onPressed: () {
                 // Navigate to Image to Text Screen
@@ -76,11 +77,19 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Profile Page'),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CommunityPage()),
+                );
+              },
+              child: Text('Community Page'),
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
