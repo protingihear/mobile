@@ -3,6 +3,8 @@ import 'package:bisadenger/main.dart';
 import 'package:flutter/material.dart';
 import 'dataUser.dart';
 import 'sign_up.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Sign_In_Page extends StatefulWidget {
   @override
@@ -12,8 +14,9 @@ class Sign_In_Page extends StatefulWidget {
 class _Sign_In_Page extends State<Sign_In_Page> {
   bool isChecked = false;
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  String? _responseMessage;
 
   List<List<String>> dataUser = Datauser().dataUser;
 
@@ -48,7 +51,7 @@ class _Sign_In_Page extends State<Sign_In_Page> {
                     width: double.infinity, // Lebar penuh
                     padding: EdgeInsets.only(left: 10),
                     child: TextField(
-                      controller: emailController,
+                      controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'Email/Username',
                         border: InputBorder.none,
@@ -67,7 +70,7 @@ class _Sign_In_Page extends State<Sign_In_Page> {
                     width: double.infinity, // Lebar penuh
                     padding: EdgeInsets.only(left: 10),
                     child: TextField(
-                      controller: passwordController,
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Password',
                         border: InputBorder.none,
@@ -112,7 +115,7 @@ class _Sign_In_Page extends State<Sign_In_Page> {
                     width: double.infinity, // Lebar penuh
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: _login,
+                      onPressed: login,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
@@ -154,30 +157,36 @@ class _Sign_In_Page extends State<Sign_In_Page> {
   }
 
   // Fungsi login untuk mengecek email dan password
-  void _login() {
-    // String inputEmail = emailController.text;
-    // String inputPassword = passwordController.text;
 
-    // bool cek = false;
-    // for (int i = 0; i < dataUser.length; i++) {
-    //   if (dataUser[i][0] == inputEmail && dataUser[i][1] == inputPassword) {
-    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //       content: Text('Selamat Datang ${dataUser[i][0]}'),
-    //       backgroundColor: Colors.green,
-    //     ));
-    //     cek = true;
-    //     break;
-    //   }
-    // }
-    // if (!cek) {
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //     content: Text('Email atau Password tidak tepat'),
-    //     backgroundColor: Colors.red,
-    //   ));
-    // }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
+  Future<void> login() async {
+    final email = Uri.encodeComponent(_emailController.text);
+    final password = Uri.encodeComponent(_passwordController.text);
+
+    final url = 'http://10.0.2.2:8000/api/auth?email=$email&password=$password';
+
+    try {
+      // Menggunakan http.get untuk fetch request
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _responseMessage = "Login successful: ${data['message']}";
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      } else {
+        setState(() {
+          _responseMessage =
+              "Login failed: ${jsonDecode(response.body)['message']}";
+        });
+      }
+    } catch (error) {
+      setState(() {
+        _responseMessage = "Error: $error";
+      });
+    }
   }
 }
