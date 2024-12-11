@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 void main() {
@@ -26,7 +25,6 @@ class VoiceToTextScreen extends StatefulWidget {
 
 class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   late stt.SpeechToText _speech;
-  late FlutterLocalNotificationsPlugin _localNotifications;
   bool _isListening = false;
   String _transcription = "";
   double _waveformAmplitude = 0.0;
@@ -35,17 +33,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
-    _localNotifications = FlutterLocalNotificationsPlugin();
-    _initializeNotifications();
-  }
-
-  void _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
-    await _localNotifications.initialize(initializationSettings);
   }
 
   void _showSnackbar(String message) {
@@ -73,20 +60,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
     );
   }
 
-  void _showLocalNotification(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'channel_id',
-      'channel_name',
-      channelDescription: 'channel_description',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await _localNotifications.show(0, title, body, platformChannelSpecifics);
-  }
-
   void _startListening() async {
     _isListening = true;
     _transcription = "";
@@ -107,7 +80,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
           });
           if (val.finalResult) {
             _showSnackbar('Transkripsi selesai!');
-            _showLocalNotification('Transkripsi', 'Teks: $_transcription');
           }
         },
         localeId: 'id_ID',
