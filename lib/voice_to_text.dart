@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 void main() {
@@ -25,6 +26,7 @@ class VoiceToTextScreen extends StatefulWidget {
 
 class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   late stt.SpeechToText _speech;
+  late FlutterLocalNotificationsPlugin _localNotifications;
   bool _isListening = false;
   String _transcription = "";
   double _waveformAmplitude = 0.0;
@@ -33,6 +35,56 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    _localNotifications = FlutterLocalNotificationsPlugin();
+    _initializeNotifications();
+  }
+
+  void _initializeNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    final InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+    await _localNotifications.initialize(initializationSettings);
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLocalNotification(String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await _localNotifications.show(0, title, body, platformChannelSpecifics);
   }
 
   void _startListening() async {
@@ -53,11 +105,15 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
             _transcription = val.recognizedWords;
             _waveformAmplitude = val.hasConfidenceRating ? val.confidence : 0.0;
           });
+          if (val.finalResult) {
+            _showSnackbar('Transkripsi selesai!');
+            _showLocalNotification('Transkripsi', 'Teks: $_transcription');
+          }
         },
         localeId: 'id_ID',
       );
     } else {
-      print("Pengakuan suara tidak tersedia.");
+      _showDialog('Error', 'Pengakuan suara tidak tersedia.');
     }
   }
 
@@ -74,7 +130,7 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(' Suara ke Teks'),
+        title: Text('Suara ke Teks'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
