@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: Sign_In_Page(),
+      home: Homepage(),
     );
   }
 }
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                 // Navigate to Image to Text Screen
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => Homepage()),
                 );
               },
               child: Text('Image to Text'),
