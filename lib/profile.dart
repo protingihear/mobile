@@ -1,5 +1,4 @@
 // profile.dart
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,9 +26,10 @@ Future<UserProfile> fetchUserProfile() async {
   return UserProfile(
     name: 'Naraya Anggraini',
     bio: '"Tetap Semangat"',
-    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo3Tluvszvh74irLX8BNvpIWXCdrPk5cjZ2Q&s',
+    imageUrl:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo3Tluvszvh74irLX8BNvpIWXCdrPk5cjZ2Q&s',
     emails: ['naraya@gmail.com', 'naraya2@gmail.com'],
-    gender: 'Perempuan', 
+    gender: 'Perempuan',
   );
 }
 
@@ -51,7 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _updateProfile(UserProfile updatedProfile) {
     setState(() {
-      _profileFuture = Future.value(updatedProfile); // Update profile with new data
+      _profileFuture =
+          Future.value(updatedProfile); // Update profile with new data
     });
   }
 
@@ -78,7 +79,8 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ProfileHeader(profile: profile, onUpdateProfile: _updateProfile),
+                  ProfileHeader(
+                      profile: profile, onUpdateProfile: _updateProfile),
                   const SizedBox(height: 15),
                   AccountSettings(emails: profile.emails),
                   const SizedBox(height: 8),
@@ -97,7 +99,9 @@ class ProfileHeader extends StatelessWidget {
   final UserProfile profile;
   final Function(UserProfile) onUpdateProfile;
 
-  const ProfileHeader({Key? key, required this.profile, required this.onUpdateProfile}) : super(key: key);
+  const ProfileHeader(
+      {Key? key, required this.profile, required this.onUpdateProfile})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +151,10 @@ class ProfileHeader extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue.shade100,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                   ),
                   child: const Center(
                     child: Text(
@@ -217,7 +223,8 @@ class _AccountSettingsState extends State<AccountSettings> {
           ),
           if (_isExpanded)
             Column(
-              children: widget.emails.map((email) => EmailRow(email: email)).toList(),
+              children:
+                  widget.emails.map((email) => EmailRow(email: email)).toList(),
             ),
         ],
       ),
@@ -279,7 +286,8 @@ class FAQAndLogoutButtons extends StatelessWidget {
         const SizedBox(height: 8),
         ListTile(
           tileColor: Colors.green.shade100,
-          leading: const Icon(Icons.logout, color: Color.fromARGB(255, 239, 0, 0)),
+          leading:
+              const Icon(Icons.logout, color: Color.fromARGB(255, 239, 0, 0)),
           title: const Text(
             'Log Out',
             style: TextStyle(
@@ -358,12 +366,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: 'Name', border: OutlineInputBorder()),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: bioController,
-              decoration: const InputDecoration(labelText: 'Bio', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: 'Bio', border: OutlineInputBorder()),
             ),
             const SizedBox(height: 16),
             Row(
@@ -411,7 +421,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
               ),
               child: const Text('Save'),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bisadenger/chatRelasi.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -8,6 +9,8 @@ class CommunityPage extends StatefulWidget {
 }
 
 class _CommunityPageState extends State<CommunityPage> {
+  int selectedIndex = 0; // index utk subPage
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,178 +113,51 @@ class _CommunityPageState extends State<CommunityPage> {
                         child: ButtonRelations(
                           icon: Icons.group,
                           label: 'Community',
-                          color: Color(0xFF499CB1),
+                          color: selectedIndex == 0
+                              ? Color(0xFF499CB1) // Warna saat dipilih
+                              : Color(0xFF8EC5D2), // Warna default
                           iconColor: Colors.white,
                           BgColor: Color(0xFF195728),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            selectedIndex = 0;
+                          });
+                        },
                       ),
                       const SizedBox(width: 20),
                       InkWell(
                         child: ButtonRelations(
                           icon: Icons.person,
                           label: 'My Activity',
-                          color: Color(0xFF8EC5D2),
+                          color: selectedIndex == 1
+                              ? Color(0xFF499CB1) // Warna saat dipilih
+                              : Color(0xFF8EC5D2), // Warna default
                           iconColor: Color(0xFF195728),
                           BgColor: Color(0xFFBAE1C4),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            selectedIndex = 1;
+                          });
+                        },
                       ),
                     ],
                   ),
                 ),
               ),
 
-              // ACTION BUTTON SUB PAGE
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.6, // Atur ukuran sesuai kebutuhan
+                child: IndexedStack(
+                  index: selectedIndex,
                   children: [
-                    Icon(
-                      Icons.add,
-                      size: 30,
-                    ),
-                    Icon(
-                      Icons.chat,
-                      size: 30,
-                    ),
-                    Icon(
-                      Icons.notification_add,
-                      size: 30,
-                    )
+                    PostList(),
+                    SubPageRelasi(),
                   ],
                 ),
               ),
-
-              // Garis pemisah laman menu Button Community dan Menu MyActivity
-              const SizedBox(
-                height: 5,
-              ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 1,
-                endIndent: 1,
-              ),
-
-              // SUb Page Aktivitas
-              // BaganAktivitas(),
-
-              // SUb Page Relasi
-              SubPageRelasi(),
-
-              // Sub Page Notifikasi
-              // SubPageNotification(),
-
-              // pilihanMenu(choose: "COMMUNITY"),
-
-              // Isi Konten Button Communtiy
-              // PostList(),
-
-              // Isi Konten MyActivity
-
-              // OLD CONTAINER
-              // Stack(
-              //   children: [
-              //     Container(
-              //       margin: EdgeInsets.only(top: 10),
-              //       width: MediaQuery.of(context).size.width,
-              //       height: 300,
-              //     ),
-              //     Positioned(
-              //       top: 20, // Atur posisi vertikalnya sesuai kebutuhan
-              //       left: 20, // Atur posisi horizontalnya sesuai kebutuhan
-              //       child: Container(
-              //         width: MediaQuery.of(context).size.width *
-              //             0.9, // Ukuran lebih besar dari container merah
-              //         height: 152, // Sesuaikan tinggi yang diinginkan
-              //         decoration: BoxDecoration(
-              //           color: Color(0xFFDEF5E4),
-              //           borderRadius: BorderRadius.circular(16),
-              //         ),
-              //         child: Column(
-              //           children: [
-              //             // PROFILE USER
-              //             Row(
-              //               children: [
-              //                 CircleAvatar(
-              //                   backgroundColor: Color(0xFFED9A82),
-              //                   radius: 20,
-              //                   child: IconButton(
-              //                     icon: const Icon(Icons.person),
-              //                     onPressed: () {
-              //                       // Add functionality here
-              //                     },
-              //                   ),
-              //                 ),
-              //                 Text("Yazid Al Adnan")
-              //               ],
-              //             ),
-              //             // ISI CONTENT
-              //             Text(
-              //                 "Hari ini saya telah belajar gerkan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh."),
-              //             // ACTION MENU POSTINGAN
-              //             Row(
-              //               children: [
-              //                 LikeButton(),
-              //                 Text("10"),
-              //                 IconButton(
-              //                   icon: Icon(Icons.insert_comment_rounded),
-              //                   color: Color(0xFF175260),
-              //                   onPressed: () {},
-              //                 ),
-              //                 Text("2"),
-              //                 IconButton(
-              //                   icon: Icon(Icons.upload),
-              //                   color: Color(0xFF175260),
-              //                   onPressed: () {},
-              //                 ),
-              //               ],
-              //             )
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // )
-
-              // OLD CONTAINER
-              // Column(
-              //   children: [
-              //     Container(
-              //       margin: EdgeInsets.only(top: 20),
-              //       width: MediaQuery.of(context).size.width,
-              //       height: 300,
-              //       color: Colors.red,
-              //       child: Container(
-              //         width: MediaQuery.of(context).size.width * 0.8,
-              //         height: 152,
-              //         decoration: BoxDecoration(
-              //           color: Color(0xFFDEF5E4),
-              //           borderRadius: BorderRadius.circular(16),
-              //         ),
-              //         child: Row(
-              //           children: [
-              //             Padding(
-              //               padding: const EdgeInsets.only(top: 20, left: 20),
-              //               child: CircleAvatar(
-              //                 backgroundColor: Color(0xFFED9A82),
-              //                 radius: 20,
-              //                 child: IconButton(
-              //                   icon: const Icon(Icons.person),
-              //                   onPressed: () {
-              //                     // Add functionality here
-              //                   },
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     )
-              //   ],
-              // )
             ],
           ),
         ),
@@ -437,61 +313,79 @@ class PostList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(20),
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        final post = posts[index];
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          color: const Color(0xFFDEF5E4),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      backgroundColor: Color(0xFFED9A82),
-                      radius: 20,
-                      child: Icon(Icons.person, color: Colors.white),
+    return Column(
+      children: [
+        // Garis pemisah laman menu Button Community dan Menu MyActivity
+        const SizedBox(height: 5),
+        const Divider(
+          color: Colors.grey,
+          thickness: 1,
+          indent: 1,
+          endIndent: 1,
+        ),
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(20),
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              final post = posts[index];
+              return Column(
+                children: [
+                  Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      post["name"],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    color: const Color(0xFFDEF5E4),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const CircleAvatar(
+                                backgroundColor: Color(0xFFED9A82),
+                                radius: 20,
+                                child: Icon(Icons.person, color: Colors.white),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                post["name"],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Text(post["content"]),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Icon(Icons.favorite, color: Colors.green),
+                              const SizedBox(width: 5),
+                              Text(post["likes"].toString()),
+                              const SizedBox(width: 20),
+                              const Icon(Icons.comment, color: Colors.green),
+                              const SizedBox(width: 5),
+                              Text(post["comments"].toString()),
+                              const SizedBox(width: 20),
+                              const Icon(Icons.share, color: Colors.green),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Text(post["content"]),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    const Icon(Icons.favorite, color: Colors.green),
-                    const SizedBox(width: 5),
-                    Text(post["likes"].toString()),
-                    const SizedBox(width: 20),
-                    const Icon(Icons.comment, color: Colors.green),
-                    const SizedBox(width: 5),
-                    Text(post["comments"].toString()),
-                    const SizedBox(width: 20),
-                    const Icon(Icons.share, color: Colors.green),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              );
+            },
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }
@@ -535,42 +429,98 @@ class pilihanMenu extends StatelessWidget {
 }
 
 // SUB PAGE RELASI / CHAT (BELUM FIX)
-class SubPageRelasi extends StatelessWidget {
+class SubPageRelasi extends StatefulWidget {
   const SubPageRelasi({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Placeholder();
+  State<SubPageRelasi> createState() => _SubPageRelasiState();
+}
 
-    // JIKA BELUM ADA CHATINGAN
-    // Container(
-    //   width: MediaQuery.of(context).size.width,
-    //   height: 300,
-    //   child: Column(
-    //     children: [
-    //       SizedBox(height: 40),
-    //       const Text(
-    //         "Tambah Relasi Kamu!",
-    //         style: TextStyle(
-    //             fontWeight: FontWeight.bold,
-    //             fontSize: 20,
-    //             fontFamily: 'Poppins'),
-    //       ),
-    //       SizedBox(height: 25),
-    //       SizedBox(
-    //         width: 300,
-    //         height: 200,
-    //         child: const Text(
-    //             "Saat anda bertukar pesan, akan muncul di aktivitas pesan anda",
-    //             textAlign: TextAlign.center,
-    //             style: TextStyle(
-    //                 fontSize: 20,
-    //                 fontFamily: 'Poppins',
-    //                 color: Color(0xFFBABABA))),
-    //       )
-    //     ],
-    //   ),
-    // );
+class _SubPageRelasiState extends State<SubPageRelasi> {
+  int selectedIndexSubPage = 0; // index utk subPage MyActivity
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 400,
+      child: Column(
+        children: [
+          // ACTION BUTTON SUB PAGE
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndexSubPage = 0;
+                    });
+                  },
+                  child: Icon(
+                    Icons.add,
+                    size: 30,
+                    color: selectedIndexSubPage == 0
+                        ? Colors.blue // Warna saat dipilih
+                        : Colors.grey, // Warna default
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndexSubPage = 1;
+                    });
+                  },
+                  child: Icon(
+                    Icons.chat,
+                    size: 30,
+                    color: selectedIndexSubPage == 1
+                        ? Colors.blue // Warna saat dipilih
+                        : Colors.grey, // Warna default
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedIndexSubPage = 2;
+                    });
+                  },
+                  child: Icon(
+                    Icons.notification_add,
+                    size: 30,
+                    color: selectedIndexSubPage == 2
+                        ? Colors.blue // Warna saat dipilih
+                        : Colors.grey, // Warna default
+                  ),
+                )
+              ],
+            ),
+          ),
+          // Garis pemisah laman menu Button Community dan Menu MyActivity
+          const SizedBox(
+            height: 5,
+          ),
+          const Divider(
+            color: Colors.grey,
+            thickness: 1,
+            indent: 1,
+            endIndent: 1,
+          ),
+          const SizedBox(height: 25),
+
+          Expanded(
+              child: IndexedStack(
+            index: selectedIndexSubPage,
+            children: [
+              BaganRelasiStart(),
+              BaganAktivitas(),
+              SubPageNotification()
+            ],
+          ))
+        ],
+      ),
+    );
   }
 }
 
@@ -607,180 +557,255 @@ class BaganAktivitas extends StatelessWidget {
   }
 }
 
-// SUB PAGE NOTIFIKASI (BELUM FIX)
-class SubPageNotification extends StatelessWidget {
-  const SubPageNotification({super.key});
+class BaganRelasiStart extends StatefulWidget {
+  const BaganRelasiStart({super.key});
+
+  @override
+  State<BaganRelasiStart> createState() => _BaganRelasiStartState();
+}
+
+class _BaganRelasiStartState extends State<BaganRelasiStart> {
+  // Fungsi untuk menangani navigasi ke laman ChatRelasi
+  void _navigateToChat(BuildContext context, String name) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CommunityPostPage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 300,
-      child: Column(
-        children: [
-          SizedBox(height: 40),
-          SizedBox(
-            width: 250,
-            height: 100,
-            child: const Text(
-              "Belum ada notifikasi untuk kamu!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  fontFamily: 'Poppins'),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: ListView(
+          children: [
+            GestureDetector(
+              onTap: () => _navigateToChat(context, "Puri Lalita Anagata"),
+              child: const ActivityItem(
+                name: "Puri Lalita Anagata",
+                message: "Hai Naraya",
+                time: "09.00",
+                isOnline: true,
+                imagePath: "assets/images/avatar1.png",
+                unreadCount: 1,
+              ),
             ),
-          ),
-          SizedBox(height: 25),
-          // const Text(
-          //     "Saat anda membagikan postingan, akan muncul di aktivitas anda",
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(
-          //         fontSize: 20,
-          //         fontFamily: 'Poppins',
-          //         color: Color(0xFFBABABA)))
+            GestureDetector(
+              onTap: () => _navigateToChat(context, "Fajar Mufid"),
+              child: const ActivityItem(
+                name: "Fajar Mufid",
+                message: "Kabarku baik",
+                time: "10.00",
+                isOnline: true,
+                imagePath: "assets/images/avatar2.png",
+              ),
+            ),
+            GestureDetector(
+              onTap: () => _navigateToChat(context, "Arga Adolf"),
+              child: const ActivityItem(
+                name: "Arga Adolf",
+                message: "Aku distasiun",
+                time: "10.00",
+                isOnline: false,
+                imagePath: "assets/images/avatar3.png",
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ActivityItem extends StatelessWidget {
+  final String name;
+  final String message;
+  final String time;
+  final bool isOnline;
+  final String imagePath;
+  final int unreadCount;
+
+  const ActivityItem({
+    super.key,
+    required this.name,
+    required this.message,
+    required this.time,
+    this.isOnline = false,
+    required this.imagePath,
+    this.unreadCount = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundImage: AssetImage(imagePath),
+      ),
+      title: Text(name),
+      subtitle: Text(message),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(time),
+          if (unreadCount > 0)
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                unreadCount.toString(),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
         ],
       ),
     );
   }
 }
 
-//         child: SingleChildScrollView(
-//           child: Column(
-//             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               // Untuk Per elemen desainnya
-//               Column(
-//                 children: [
-//                   // Untuk back button dan teks Relations
-//                   // Belum responsive di tengah
-//                   Row(
-//                     children: [
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 20, left: 20),
-//                         child: CircleAvatar(
-//                           backgroundColor: Colors
-//                               .green[100], // Warna latar belakang hijau muda
-//                           radius: 20,
-//                           child: IconButton(
-//                             icon: Icon(Icons.arrow_back), // Ikon panah kiri
-//                             onPressed: () {
-//                               // Tambahkan fungsionalitas saat tombol ditekan di sini
-//                             },
-//                           ),
-//                         ),
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 17, left: 100),
-//                         child: Text(
-//                           "Relations",
-//                           style: TextStyle(fontSize: 20, fontFamily: 'Poppins'),
-//                         ),
-//                       )
-//                     ],
-//                   ),
-//                   // Button search
-//                   Row(
-//                     children: [
-//                       Container(
-//                         margin: const EdgeInsets.symmetric(vertical: 20),
-//                         width: MediaQuery.of(context).size.width,
-//                         height: 35,
-//                         child: Center(
-//                           child: Container(
-//                             width: 350,
-//                             height: 35,
-//                             decoration: BoxDecoration(
-//                               color: Colors.white, // warna background
-//                               borderRadius:
-//                                   BorderRadius.circular(20), // bentuk rounded
-//                               border: Border.all(
-//                                   color: Colors
-//                                       .blueAccent), // border dengan warna biru
-//                             ),
-//                             child: const TextField(
-//                               decoration: InputDecoration(
-//                                 hintText: 'Search',
-//                                 hintStyle:
-//                                     TextStyle(color: Colors.grey, fontSize: 18),
-//                                 prefixIcon:
-//                                     Icon(Icons.search, color: Colors.blue),
-//                                 border: InputBorder.none,
-//                                 contentPadding:
-//                                     EdgeInsets.symmetric(vertical: 10),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       )
-//                     ],
-//                   ),
-//                   // Text Community
-//                   Row(
-//                     children: [
-//                       Padding(
-//                         padding: EdgeInsets.only(left: 20),
-//                         child: Text(
-//                           "Community",
-//                           style: TextStyle(fontFamily: 'Poppins', fontSize: 17),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   // Menu Community
-//                   Row(
-//                     children: [
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 15, left: 15),
-//                         child: SizedBox(
-//                           height: 100, // Set a fixed height for the row
-//                           child: ListView(
-//                             scrollDirection: Axis.horizontal,
-//                             children: [
-//                               _buildCommunityCard(),
-//                               _buildCommunityCard(),
-//                               _buildCommunityCard(),
-//                             ],
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.only(top: 15, left: 15),
-//                     child: SizedBox(
-//                       height: 100, // Set a fixed height for the row
-//                       child: ListView(
-//                         scrollDirection: Axis.horizontal,
-//                         children: [
-//                           _buildCommunityCard(),
-//                           _buildCommunityCard(),
-//                           _buildCommunityCard(),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               Column(
-//                 children: [],
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
+// SUB PAGE AKTIVITAS (kalau kosong no chatan)
+// class BaganRelasiStart extends StatelessWidget {
+//   const BaganRelasiStart({super.key});
 
-//   Widget _buildCommunityCard() {
+//   @override
+//   Widget build(BuildContext context) {
 //     return Container(
-//       width: 127,
-//       height: 86,
-//       margin: const EdgeInsets.only(right: 15),
-//       decoration: BoxDecoration(
-//         color: Color(0xFFCCEBD4),
-//         borderRadius: BorderRadius.circular(16),
+//       width: MediaQuery.of(context).size.width,
+//       height: 300,
+//       child: Column(
+//         children: [
+//           SizedBox(height: 40),
+//           const Text(
+//             "Tambah Relasi Kamu!",
+//             style: TextStyle(
+//                 fontWeight: FontWeight.bold,
+//                 fontSize: 20,
+//                 fontFamily: 'Poppins'),
+//           ),
+//           SizedBox(height: 25),
+//           SizedBox(
+//             width: 300,
+//             height: 200,
+//             child: const Text(
+//                 "Saat anda bertukar pesan, akan muncul di aktivitas pesan anda",
+//                 textAlign: TextAlign.center,
+//                 style: TextStyle(
+//                     fontSize: 20,
+//                     fontFamily: 'Poppins',
+//                     color: Color(0xFFBABABA))),
+//           )
+//         ],
 //       ),
 //     );
 //   }
 // }
+
+// SUB PAGE NOTIFIKASI (KALAU LAGI GADA NOTIFIKASI)
+// class SubPageNotification extends StatelessWidget {
+//   const SubPageNotification({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: MediaQuery.of(context).size.width,
+//       height: 300,
+//       child: Column(
+//         children: [
+//           SizedBox(height: 40),
+//           SizedBox(
+//             width: 250,
+//             height: 100,
+//             child: const Text(
+//               "Belum ada notifikasi untuk kamu!",
+//               textAlign: TextAlign.center,
+//               style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                   fontSize: 20,
+//                   fontFamily: 'Poppins'),
+//             ),
+//           ),
+//           SizedBox(height: 25),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+class SubPageNotification extends StatelessWidget {
+  const SubPageNotification({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Dummy data notifikasi
+    final notifications = [
+      {
+        'name': 'Puri Lalita Anagata',
+        'action': 'Send your message.',
+        'time': '1h',
+        'section': 'Today'
+      },
+      {
+        'name': 'Fajar Mufid',
+        'action': 'Like your post.',
+        'time': '2h',
+        'section': 'Today'
+      },
+      {
+        'name': 'Puri Lalita Anagata',
+        'action': 'Comment your post.',
+        'time': '1h',
+        'section': 'Yesterday'
+      },
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Notifications"),
+      ),
+      body: ListView(
+        children: [
+          // Membagi notifikasi menjadi berdasarkan "section"
+          ...['Today', 'Yesterday'].map((section) {
+            final sectionNotifications =
+                notifications.where((n) => n['section'] == section).toList();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text(
+                    section,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                Column(
+                  children: sectionNotifications.map((notification) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        child: Icon(Icons.person, color: Colors.white),
+                      ),
+                      title: Text(notification['name'] ?? ""),
+                      subtitle: Text(notification['action'] ?? ""),
+                      trailing: Text(notification['time'] ?? ""),
+                    );
+                  }).toList(),
+                ),
+              ],
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}

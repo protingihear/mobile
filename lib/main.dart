@@ -3,7 +3,7 @@ import 'package:bisadenger/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'voice_to_text.dart';
-import 'image_to_text.dart'; // Import the Image to Text screen
+// Import the Image to Text screen
 import 'community.dart';
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      home: CommunityPage(),
     );
   }
 }
