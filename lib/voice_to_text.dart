@@ -27,7 +27,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _transcription = "";
-  double _waveformAmplitude = 0.0;
 
   @override
   void initState() {
@@ -76,7 +75,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
         onResult: (val) {
           setState(() {
             _transcription = val.recognizedWords;
-            _waveformAmplitude = val.hasConfidenceRating ? val.confidence : 0.0;
           });
           if (val.finalResult) {
             _showSnackbar('Transkripsi selesai!');
@@ -93,7 +91,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
     _isListening = false;
     setState(() {
       _transcription = "";
-      _waveformAmplitude = 0.0;
     });
     await _speech.stop();
   }
@@ -133,8 +130,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
               ),
             ),
             SizedBox(height: 20),
-            _isListening ? Waveform(amplitude: _waveformAmplitude) : SizedBox.shrink(),
-            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isListening ? _stopListening : _startListening,
               style: ElevatedButton.styleFrom(
@@ -154,45 +149,5 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   void dispose() {
     _speech.cancel();
     super.dispose();
-  }
-}
-
-class Waveform extends StatelessWidget {
-  final double amplitude;
-
-  const Waveform({Key? key, required this.amplitude}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: double.infinity,
-      child: CustomPaint(
-        painter: WaveformPainter(amplitude: amplitude),
-      ),
-    );
-  }
-}
-
-class WaveformPainter extends CustomPainter {
-  final double amplitude;
-
-  WaveformPainter({required this.amplitude});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.grey
-      ..style = PaintingStyle.fill;
-
-    for (int i = 0; i < size.width.toInt(); i += 5) {
-      double height = (size.height / 2) + (amplitude * 20 * (0.5 - (i / size.width)));
-      canvas.drawLine(Offset(i.toDouble(), size.height), Offset(i.toDouble(), height), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
