@@ -1,3 +1,4 @@
+import 'package:bisadenger/image_to_text.dart';
 import 'package:bisadenger/lesson1.dart';
 import 'package:bisadenger/voice_to_text.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +123,12 @@ class _HomepageState extends State<Homepage> {
                             GestureDetector(
                                 onTap: () {
                                   // Aksi ketika container ini ditekan
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => IMGtoText(),
+                                    ),
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(14.0),
