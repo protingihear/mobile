@@ -12,6 +12,7 @@ dependencies:
   flutter_tts: ^3.4.0 # For text-to-speech functionality
   speech_to_text: ^7.0.0 # For voice-to-text functionality
   permission_handler: ^10.2.0 # or the latest version
+  flutter_local_notifications: ^14.0.0
   http: any
   #camera: ^0.10.1
   #image: ^3.0.1 # For image processing if necessary
