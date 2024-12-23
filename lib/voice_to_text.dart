@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,11 +35,29 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
     _speech = stt.SpeechToText();
   }
 
+  Future<bool> _requestMicrophonePermission() async {
+    var status = await Permission.microphone.status;
+    if (status.isGranted) {
+      return true;
+    } else {
+      status = await Permission.microphone.request();
+      if (status.isGranted) {
+        return true;
+      } else {
+        _showDialog(
+          'Izin Ditolak',
+          'Aplikasi ini memerlukan akses mikrofon untuk bekerja. Silakan aktifkan izin di pengaturan.',
+        );
+        return false;
+      }
+    }
+  }
+
   void _showSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 2),
       ),
     );
   }
@@ -60,6 +79,9 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   }
 
   void _startListening() async {
+    bool hasPermission = await _requestMicrophonePermission();
+    if (!hasPermission) return;
+
     _isListening = true;
     _transcription = "";
     setState(() {});
@@ -67,7 +89,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
     bool available = await _speech.initialize(
       onStatus: (val) => print('Status: $val'),
       onError: (val) => print('Error: $val'),
-      debugLogging: true,
     );
 
     if (available) {
@@ -77,7 +98,7 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
             _transcription = val.recognizedWords;
           });
           if (val.finalResult) {
-            _showSnackbar('Transkripsi selesai!');
+            _showDialog('Hasil Transkripsi', _transcription.isEmpty ? 'Tidak ada suara yang terdeteksi.' : _transcription);
           }
         },
         localeId: 'id_ID',
@@ -93,6 +114,7 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
       _transcription = "";
     });
     await _speech.stop();
+    _showSnackbar('Mikrofon dimatikan.');
   }
 
   @override
