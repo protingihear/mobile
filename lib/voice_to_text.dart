@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-//import 'dart:math';
+import 'package:permission_handler/permission_handler.dart'; // Import izin
 
 void main() {
   runApp(MyApp());
@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Demo Suara ke Teks',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -29,7 +28,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _transcription = "";
-  double _waveformAmplitude = 0.0; 
 
   @override
   void initState() {
@@ -37,39 +35,79 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
     _speech = stt.SpeechToText();
   }
 
+  Future<bool> _requestMicrophonePermission() async {
+    var status = await Permission.microphone.status;
+    if (status.isGranted) {
+      return true;
+    } else {
+      status = await Permission.microphone.request();
+      return status.isGranted;
+    }
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _startListening() async {
+    bool hasPermission = await _requestMicrophonePermission();
+    if (!hasPermission) {
+      _showDialog('Izin Ditolak', 'Aplikasi memerlukan akses mikrofon.');
+      return;
+    }
+
     _isListening = true;
-    _transcription = ""; // Clear text at the start of listening
+    _transcription = "";
     setState(() {});
 
-    // Initialize speech recognition with Bahasa Indonesia locale
     bool available = await _speech.initialize(
       onStatus: (val) => print('Status: $val'),
       onError: (val) => print('Error: $val'),
-      debugLogging: true, // Optional for debugging
+      debugLogging: true,
     );
 
     if (available) {
-      // Listen for Bahasa Indonesia
       _speech.listen(
         onResult: (val) {
           setState(() {
-            _transcription = val.recognizedWords; // Update transcription
-            _waveformAmplitude = val.hasConfidenceRating ? val.confidence : 0.0; // Use confidence to change amplitude
+            _transcription = val.recognizedWords;
           });
+          if (val.finalResult) {
+            _showSnackbar('Transkripsi selesai!');
+          }
         },
-        localeId: 'id_ID', // Set locale to Bahasa Indonesia
+        localeId: 'id_ID',
       );
     } else {
-      print("Pengakuan suara tidak tersedia.");
+      _showDialog('Error', 'Pengakuan suara tidak tersedia.');
     }
   }
 
   void _stopListening() async {
     _isListening = false;
     setState(() {
-      _transcription = ""; // Clear text after stopping listening
-      _waveformAmplitude = 0.0; // Reset amplitude
+      _transcription = "";
     });
     await _speech.stop();
   }
@@ -78,11 +116,11 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(' Suara ke Teks'),
+        title: Text('Suara ke Teks'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop(); // Handle back navigation
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -90,7 +128,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Display a title based on listening status
             Text(
               _isListening ? 'Mendengarkan...' : 'Mulai menerjemahkan',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -110,10 +147,6 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
               ),
             ),
             SizedBox(height: 20),
-            // Dynamic waveform representation
-            _isListening ? Waveform(amplitude: _waveformAmplitude) : SizedBox.shrink(),
-            SizedBox(height: 20),
-            // Listening button with dynamic color based on listening state
             ElevatedButton(
               onPressed: _isListening ? _stopListening : _startListening,
               style: ElevatedButton.styleFrom(
@@ -133,47 +166,5 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
   void dispose() {
     _speech.cancel();
     super.dispose();
-  }
-}
-
-// Simple Waveform Widget
-class Waveform extends StatelessWidget {
-  final double amplitude;
-
-  const Waveform({Key? key, required this.amplitude}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: double.infinity,
-      child: CustomPaint(
-        painter: WaveformPainter(amplitude: amplitude),
-      ),
-    );
-  }
-}
-
-class WaveformPainter extends CustomPainter {
-  final double amplitude;
-
-  WaveformPainter({required this.amplitude});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.grey
-      ..style = PaintingStyle.fill;
-
-    // Draw dynamic waveform based on amplitude
-    for (int i = 0; i < size.width.toInt(); i += 5) {
-      double height = (size.height / 2) + (amplitude * 20 * (0.5 - (i / size.width))); // Change height based on amplitude
-      canvas.drawLine(Offset(i.toDouble(), size.height), Offset(i.toDouble(), height), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true; // Repaint every frame for dynamic effect
   }
 }

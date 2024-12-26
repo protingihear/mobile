@@ -8,10 +8,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.8.5+3  # For picking images from the camera
-  flutter_tts: ^3.4.0     # For text-to-speech functionality
-  speech_to_text: ^7.0.0   # For voice-to-text functionality
+  image_picker: ^0.8.5+3 # For picking images from the camera
+  flutter_tts: ^3.4.0 # For text-to-speech functionality
+  speech_to_text: ^7.0.0 # For voice-to-text functionality
   permission_handler: ^10.2.0 # or the latest version
+ 
+  http: any
+  url_launcher: any
   #camera: ^0.10.1
   #image: ^3.0.1 # For image processing if necessary
   #tflite: ^1.1.2
@@ -20,12 +23,26 @@ dependencies:
   #tflite_flutter_helper: ^0.2.0  # For preprocessing
   flutter_test:
     sdk: flutter
+  google_fonts: ^6.2.1
 
 # The following section is specific to Flutter
 flutter:
-
   uses-material-design: true
 
   assets:
     - assets/hand_gesture_model.tflite
     - assets/labels.txt
+    - assets/images/arrow-right.png
+    - assets/images/Icon.png
+    - assets/images/Logo_IHear.png
+    - assets/imagesComm/
+    - assets/images/VoiceToText.png
+    - assets/images/ImageScan.png
+    - assets/images/Informan1.png
+    - assets/images/Informan2.png
+    - assets/images/Lesson.png
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: font/Poppins/Poppins-Bold.ttf

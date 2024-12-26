@@ -9,7 +9,8 @@
     <!-- Declare features and permissions -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+   
     <application
         android:label="mediapipe"
         android:name=".MyApp"
