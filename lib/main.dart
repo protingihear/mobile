@@ -22,64 +22,72 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Voice & Image to Text Demo'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to Voice to Text Screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => VoiceToTextScreen()),
-                );
-              },
-              child: Text('Voice to Text'),
-            ),
-            /*SizedBox(height: 20), // Add some spacing between buttons
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to Image to Text Screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RealTimeOCRScreen()),
-                );
-              },
-              child: Text('Image to Text'),
-            ),*/
-             SizedBox(height: 20), // Add some spacing between buttons
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to Image to Text Screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              },
-              child: Text('Image to Text'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-              child: Text('Profile Page'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
+// class HomeScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Voice & Image to Text Demo'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             ElevatedButton(
+//               onPressed: () {
+//                 // Navigate to Voice to Text Screen
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => VoiceToTextScreen()),
+//                 );
+//               },
+//               child: Text('Voice to Text'),
+//             ),
+//             /*SizedBox(height: 20), // Add some spacing between buttons
+//             ElevatedButton(
+//               onPressed: () {
+//                 // Navigate to Image to Text Screen
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => RealTimeOCRScreen()),
+//                 );
+//               },
+//               child: Text('Image to Text'),
+//             ),*/
+//             SizedBox(height: 20), // Add some spacing between buttons
+//             ElevatedButton(
+//               onPressed: () {
+//                 // Navigate to Image to Text Screen
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => Homepage()),
+//                 );
+//               },
+//               child: Text('Image to Text'),
+//             ),
+//             SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => ProfilePage()),
+//                 );
+//               },
+//               child: Text('Profile Page'),
+//             ),
+//             SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => CommunityPage()),
+//                 );
+//               },
+//               child: Text('Community Page'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
