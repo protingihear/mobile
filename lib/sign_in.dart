@@ -1,6 +1,8 @@
+
 import 'package:bisadenger/community.dart';
 import 'home_page.dart';
 import 'package:bisadenger/lesson1.dart';
+
 import 'package:bisadenger/main.dart';
 import 'package:flutter/material.dart';
 import 'dataUser.dart';
@@ -175,7 +177,9 @@ class _Sign_In_Page extends State<Sign_In_Page> {
         setState(() {
           _responseMessage = "Login successful: ${data['message']}";
         });
+
         Navigator.pushReplacement(
+
           context,
           MaterialPageRoute(builder: (context) => Homepage()),
         );
