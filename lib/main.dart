@@ -1,4 +1,5 @@
 import 'package:bisadenger/home_page.dart';
+import 'package:bisadenger/lesson1.dart';
 import 'package:bisadenger/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      home: Sign_In_Page(),
     );
   }
 }
