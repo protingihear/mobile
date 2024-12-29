@@ -264,6 +264,22 @@ class sign_up extends State<Sign_Up_Page> {
                       : null,
                   child: Text('Sign Up', style: TextStyle(fontSize: 16)),
                 ),
+                SizedBox(height: 12),
+
+                // Cancel Button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    minimumSize: Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context); // Kembali ke halaman sebelumnya
+                  },
+                  child: Text('Cancel', style: TextStyle(fontSize: 16)),
+                ),
               ],
             ),
           ),
