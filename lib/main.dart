@@ -1,4 +1,5 @@
 import 'package:bisadenger/home_page.dart';
+import 'package:bisadenger/information.dart';
 import 'package:bisadenger/lesson1.dart';
 import 'package:bisadenger/sign_in.dart';
 import 'package:flutter/material.dart';
