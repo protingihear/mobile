@@ -3,10 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For decoding JSON
 
-String baseUrl = 'http://192.168.100.37:8000'; // Replace localhost with your IP
-
+String baseUrl = 'http://10.0.2.2:8000'; // Updated base URL for Android emulator
 
 class UserProfile {
   String id; // Added ID for backend interaction
@@ -74,60 +75,80 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late Future<UserProfile> _profileFuture;
+  Future<UserProfile>? _profileFuture;
+  int? _userId;
 
   @override
   void initState() {
     super.initState();
-    _profileFuture = fetchUserProfile();
+    _loadUserId();
   }
 
-  void _updateProfile(UserProfile updatedProfile) {
+  void _loadUserId() async {
+  final prefs = await SharedPreferences.getInstance();
+  final userId = prefs.getInt('userId');
+  print("User ID: $userId");
 
-  setState(() {
-    _profileFuture = fetchUserProfile(); // Re-fetch the profile from the server
-  });
+  if (userId != null) {
+    setState(() {
+      _userId = userId;
+      _profileFuture = fetchUserProfile(userId);
+    });
+  } else {
+    // Redirect to the sign-in page if no userId is found
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Sign_In_Page()),
+    );
+  }
 }
 
-
+  void _updateProfile(UserProfile updatedProfile) {
+    setState(() {
+      if (_userId != null) {
+        _profileFuture = fetchUserProfile(_userId!); // Re-fetch the profile
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: const CustomBottomNavigationBar(),
-      body: FutureBuilder<UserProfile>(
-        future: _profileFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error loading profile'));
-          } else if (!snapshot.hasData) {
-            return const Center(child: Text('No data found'));
-          }
+      body: _profileFuture == null
+          ? const Center(child: CircularProgressIndicator()) // Show loading initially
+          : FutureBuilder<UserProfile>(
+              future: _profileFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error loading profile'));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: Text('No data found'));
+                }
 
-          final profile = snapshot.data!;
-          print('Image URL: ${profile.imageUrl}');
+                final profile = snapshot.data!;
+                print('Image URL: ${profile.imageUrl}');
 
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProfileHeader(
-                      profile: profile, onUpdateProfile: _updateProfile),
-                  const SizedBox(height: 15),
-                  AccountSettings(emails: profile.emails),
-                  const SizedBox(height: 8),
-                  const FAQAndLogoutButtons(),
-                ],
-              ),
+                return SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ProfileHeader(
+                            profile: profile, onUpdateProfile: _updateProfile),
+                        const SizedBox(height: 15),
+                        AccountSettings(emails: profile.emails),
+                        const SizedBox(height: 8),
+                        const FAQAndLogoutButtons(),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
@@ -310,6 +331,18 @@ class EmailRow extends StatelessWidget {
 class FAQAndLogoutButtons extends StatelessWidget {
   const FAQAndLogoutButtons({Key? key}) : super(key: key);
 
+  Future<void> _logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId'); // Remove userId from SharedPreferences
+
+    // Navigate to the sign-in page and remove all previous routes
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Sign_In_Page()),
+      (route) => false, // Remove all previous routes
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -326,6 +359,9 @@ class FAQAndLogoutButtons extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
+          onTap: () {
+            // Add FAQ navigation logic here if needed
+          },
         ),
         const SizedBox(height: 8),
         ListTile(
@@ -342,38 +378,13 @@ class FAQAndLogoutButtons extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          onTap: () {},
+          onTap: () => _logout(context), // Call the logout function on tap
         ),
       ],
     );
   }
 }
 
-class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.public),
-          label: 'Relations',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
-      selectedItemColor: Colors.green,
-      unselectedItemColor: Colors.grey,
-    );
-  }
-}
 
 class EditProfilePage extends StatefulWidget {
   final UserProfile profile;
