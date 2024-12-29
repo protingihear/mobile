@@ -24,6 +24,7 @@ dependencies:
   flutter_test:
     sdk: flutter
   google_fonts: ^6.2.1
+  shared_preferences: any
 
 # The following section is specific to Flutter
 flutter:

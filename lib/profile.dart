@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+
 import 'sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // For decoding JSON
 
 String baseUrl = 'http://10.0.2.2:8000'; // Updated base URL for Android emulator
+
 
 class UserProfile {
   String id; // Added ID for backend interaction
@@ -45,12 +47,8 @@ class UserProfile {
   }
 }
 
-Future<UserProfile> fetchUserProfile() async {
-  const userId = 4; // Simulated userId
-
-  // Replace with your local IP address and port
+Future<UserProfile> fetchUserProfile(int userId) async {
   final url = Uri.parse('$baseUrl/api/teman-tuli/$userId');
-
 
   try {
     final response = await http.get(url);
@@ -75,7 +73,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   Future<UserProfile>? _profileFuture;
+
   int? _userId;
 
   @override
@@ -85,6 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _loadUserId() async {
+
   final prefs = await SharedPreferences.getInstance();
   final userId = prefs.getInt('userId');
   print("User ID: $userId");
@@ -107,6 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       if (_userId != null) {
         _profileFuture = fetchUserProfile(_userId!); // Re-fetch the profile
+
       }
     });
   }
@@ -115,6 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       body: _profileFuture == null
           ? const Center(child: CircularProgressIndicator()) // Show loading initially
           : FutureBuilder<UserProfile>(
@@ -148,10 +151,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 );
               },
+
             ),
     );
   }
 }
+
 
 class ProfileHeader extends StatelessWidget {
   final UserProfile profile;
@@ -384,7 +389,6 @@ class FAQAndLogoutButtons extends StatelessWidget {
     );
   }
 }
-
 
 class EditProfilePage extends StatefulWidget {
   final UserProfile profile;
