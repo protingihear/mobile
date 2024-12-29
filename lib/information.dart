@@ -1,134 +1,145 @@
 import 'package:flutter/material.dart';
 
-class InformationScreen extends StatelessWidget {
-  const InformationScreen({super.key});
-
+class InformationPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        backgroundColor: Colors.grey[200],
-        elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 10),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xFFA3D6A7),
-          ),
-          child: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildNewsItem(
-              imageUrl: 'https://via.placeholder.com/120x90',
-              date: 'Jumat, 22 Nov 2024 19:30 WIB',
-              title:
-                  'Finalis Tuli Pertama Miss Universe Mundur, Penyakitnya Bikin Tak Kuat Berdiri',
-              description:
-                  'Mia le Roux, finalis tuli pertama Miss Universe 2024, mundur karena masalah kesehatan. Dia menderita penyakit ini yang mengganggu aktivitasnya.',
-            ),
-            _buildNewsItem(
-              imageUrl: 'https://via.placeholder.com/120x90',
-              date: 'Senin, 11 Nov 2024 18:05 WIB',
-              title:
-                  'Senangnya Tunarungu Pacitan Terima Alat Bantu Dengar dari Bhayangkari',
-              description:
-                  'Sukiran dan Novi, penyandang tunarungu di Pacitan, kini dapat berkomunikasi lebih baik. Ini berkat alat bantu dengar bantuan dari Bhayangkari Pacitan.',
-            ),
-            _buildNewsItem(
-              imageUrl: 'https://via.placeholder.com/120x90',
-              date: 'Senin, 29 Jul 2024 14:35 WIB',
-              title:
-                  'Pemohon SIM Tunarungu di Kota Kediri Didampingi Juru Bahasa Isyarat',
-              description:
-                  'Para penyandang disabilitas yang mengurus SIM A dan SIM C di Kota Kediri, didampingi penerjemah atau juru bahasa isyarat. Ini mempermudah pembuatan.',
-            ),
-          ],
+  _InformationPageState createState() => _InformationPageState();
+}
+
+class _InformationPageState extends State<InformationPage> {
+  final List<Map<String, String>> _newsList = [
+    {
+      'image': 'https://via.placeholder.com/150',
+      'source': 'Wolipop',
+      'time': 'Jumat, 22 Nov 2024 19:30 WIB',
+      'title': 'Finalis Tuli Pertama Miss Universe Mundur, Penyakitnya Bikin Tak Kuat Berdiri',
+      'content': 'Mia le Roux, finalis tuli pertama Miss Universe 2024, mundur karena masalah kesehatan...',
+    },
+    {
+      'image': 'https://via.placeholder.com/150',
+      'source': 'detikJatim',
+      'time': 'Senin, 11 Nov 2024 18:05 WIB',
+      'title': 'Senangnya Tunarungu Pacitan Terima Alat Bantu Dengar dari Bhayangkari',
+      'content': 'Sukiran dan Novi, penyandang tunarungu di Pacitan, kini dapat berkomunikasi lebih baik...',
+    },
+    {
+      'image': 'https://via.placeholder.com/150',
+      'source': 'detikJatim',
+      'time': 'Senin, 29 Jul 2024 14:35 WIB',
+      'title': 'Pemohon SIM Tunarungu di Kota Kediri Didampingi Juru Bahasa Isyarat',
+      'content': 'Para penyandang disabilitas yang mengurus SIM A dan SIM C di Kota Kediri...',
+    },
+  ];
+
+  void _navigateToAddNews(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddNewsPage(
+          onAddNews: (newNews) {
+            setState(() {
+              _newsList.add(newNews);
+            });
+          },
         ),
       ),
     );
   }
 
-  Widget _buildNewsItem({
-    required String imageUrl,
-    required String date,
-    required String title,
-    required String description,
-  }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Information'),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              imageUrl,
-              width: 120,
-              height: 90,
-              fit: BoxFit.cover,
+      body: ListView.builder(
+        itemCount: _newsList.length,
+        itemBuilder: (context, index) {
+          final news = _newsList[index];
+          return Card(
+            margin: EdgeInsets.all(8.0),
+            child: ListTile(
+              leading: Image.network(news['image']!),
+              title: Text(news['title']!),
+              subtitle: Text('${news['source']} - ${news['time']}'),
+              onTap: () {
+              },
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$date',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _navigateToAddNews(context),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class AddNewsPage extends StatefulWidget {
+  final Function(Map<String, String>) onAddNews;
+
+  AddNewsPage({required this.onAddNews});
+
+  @override
+  _AddNewsPageState createState() => _AddNewsPageState();
+}
+
+class _AddNewsPageState extends State<AddNewsPage> {
+  final TextEditingController _imageController = TextEditingController();
+  final TextEditingController _sourceController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+
+  void _submitNews() {
+    final newNews = {
+      'image': _imageController.text,
+      'source': _sourceController.text,
+      'time': _timeController.text,
+      'title': _titleController.text,
+      'content': _contentController.text,
+    };
+    widget.onAddNews(newNews);
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Add News'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _imageController,
+              decoration: InputDecoration(labelText: 'Image URL'),
             ),
-          ),
-        ],
+            TextField(
+              controller: _sourceController,
+              decoration: InputDecoration(labelText: 'Source'),
+            ),
+            TextField(
+              controller: _timeController,
+              decoration: InputDecoration(labelText: 'Time'),
+            ),
+            TextField(
+              controller: _titleController,
+              decoration: InputDecoration(labelText: 'Title'),
+            ),
+            TextField(
+              controller: _contentController,
+              decoration: InputDecoration(labelText: 'Content'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _submitNews,
+              child: Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }

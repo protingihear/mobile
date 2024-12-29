@@ -88,9 +88,19 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Community Page'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InformationPage()),
+                );
+              },
+              child: Text('Information Page'),
+            ),
           ],
         ),
       ),
     );
   }
 }
+

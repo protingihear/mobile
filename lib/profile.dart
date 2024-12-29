@@ -2,8 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // For decoding JSON
+
+String baseUrl = 'http://192.168.100.37:8000'; // Replace localhost with your IP
+
 
 class UserProfile {
+  String id; // Added ID for backend interaction
   String name;
   String bio;
   String imageUrl;
@@ -11,26 +17,53 @@ class UserProfile {
   String gender;
 
   UserProfile({
+    required this.id,
     required this.name,
     required this.bio,
     required this.imageUrl,
     required this.emails,
     required this.gender,
   });
+
+  // Factory method to create a UserProfile from JSON
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
+    String imageUrl = json['picture'] != null
+        ? (json['picture'].toString().startsWith('http')
+            ? json['picture']
+            : '$baseUrl${json['picture']}')
+        : 'https://via.placeholder.com/250';
+
+    return UserProfile(
+      id: json['id'].toString(),
+      name: '${json['firstName'] ?? ''} ${json['lastName'] ?? ''}',
+      bio: json['bio'] ?? '',
+      imageUrl: imageUrl,
+      emails: [json['email'] ?? ''],
+      gender: json['gender'] ?? '',
+    );
+  }
 }
 
 Future<UserProfile> fetchUserProfile() async {
-  // Simulate network delay
-  await Future.delayed(const Duration(seconds: 2));
-  // Mock data that will be replaced with database logic later
-  return UserProfile(
-    name: 'Naraya Anggraini',
-    bio: '"Tetap Semangat"',
-    imageUrl:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo3Tluvszvh74irLX8BNvpIWXCdrPk5cjZ2Q&s',
-    emails: ['naraya@gmail.com', 'naraya2@gmail.com'],
-    gender: 'Perempuan',
-  );
+  const userId = 4; // Simulated userId
+
+  // Replace with your local IP address and port
+  final url = Uri.parse('$baseUrl/api/teman-tuli/$userId');
+
+
+  try {
+    final response = await http.get(url);
+    print('Response Data: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return UserProfile.fromJson(data);
+    } else {
+      throw Exception('Failed to load profile data');
+    }
+  } catch (e) {
+    throw Exception('Error fetching profile: $e');
+  }
 }
 
 class ProfilePage extends StatefulWidget {
@@ -50,11 +83,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _updateProfile(UserProfile updatedProfile) {
-    setState(() {
-      _profileFuture =
-          Future.value(updatedProfile); // Update profile with new data
-    });
-  }
+
+  setState(() {
+    _profileFuture = fetchUserProfile(); // Re-fetch the profile from the server
+  });
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +107,8 @@ class _ProfilePageState extends State<ProfilePage> {
           }
 
           final profile = snapshot.data!;
+          print('Image URL: ${profile.imageUrl}');
+
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -114,7 +151,13 @@ class ProfileHeader extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: NetworkImage(profile.imageUrl),
+            child: ClipOval(
+              child: Image.network(
+                'http://192.168.100.37:8000/storage/profile-pictures/yVLwnYetathZAXY3MyE4jfsZ84W0Ihog4ffEhI9W.png',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+              ),
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -137,17 +180,18 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () async {
-                    final updatedProfile = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProfilePage(profile: profile),
-                      ),
-                    );
-                    if (updatedProfile != null) {
-                      onUpdateProfile(updatedProfile); // Update profile
-                    }
-                  },
+  onPressed: () async {
+    final updatedProfile = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfilePage(profile: profile),
+      ),
+    );
+    if (updatedProfile != null) {
+      onUpdateProfile(updatedProfile); // Update profile
+    }
+  },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue.shade100,
                     shape: RoundedRectangleBorder(
@@ -306,8 +350,9 @@ class FAQAndLogoutButtons extends StatelessWidget {
 
 class EditProfilePage extends StatefulWidget {
   final UserProfile profile;
+  final Function(UserProfile)? onSave;
 
-  const EditProfilePage({Key? key, required this.profile}) : super(key: key);
+  const EditProfilePage({Key? key, required this.profile, this.onSave}) : super(key: key);
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -323,7 +368,50 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     nameController = TextEditingController(text: widget.profile.name);
     bioController = TextEditingController(text: widget.profile.bio);
-    selectedGender = widget.profile.gender;
+
+    // Convert backend gender to UI-friendly gender
+    selectedGender = widget.profile.gender == 'P' ? 'Perempuan' : 'Laki-Laki';
+  }
+
+  Future<void> updateUserProfile() async {
+    final url = Uri.parse('$baseUrl/api/teman-tuli/${widget.profile.id}/update');
+
+    // Extract first and last names
+    final nameParts = nameController.text.split(' ');
+    final firstName = nameParts.isNotEmpty ? nameParts.first : '';
+    final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+
+    // Convert gender to backend format
+    final genderForBackend = selectedGender == 'Perempuan' ? 'P' : 'L';
+
+    final body = {
+      'firstName': firstName,
+      'lastName': lastName,
+      'bio': bioController.text,
+      'gender': genderForBackend,
+      'email': widget.profile.emails.isNotEmpty ? widget.profile.emails.first : ''
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 200) {
+        final updatedProfile = UserProfile.fromJson(json.decode(response.body));
+
+        // Immediately update the UI
+        Navigator.pop(context, updatedProfile);
+      } else {
+        throw Exception('Failed to update profile: ${response.body}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile: $e')),
+      );
+    }
   }
 
   @override
@@ -380,18 +468,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(
-                  context,
-                  UserProfile(
-                    name: nameController.text,
-                    bio: bioController.text,
-                    imageUrl: widget.profile.imageUrl,
-                    emails: widget.profile.emails,
-                    gender: selectedGender ?? widget.profile.gender,
-                  ),
-                );
-              },
+              onPressed: updateUserProfile,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 shape: RoundedRectangleBorder(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:permission_handler/permission_handler.dart'; // Import izin
+import 'package:permission_handler/permission_handler.dart'; 
 
 void main() {
   runApp(MyApp());
@@ -93,8 +93,15 @@ class _VoiceToTextScreenState extends State<VoiceToTextScreen> {
           setState(() {
             _transcription = val.recognizedWords;
           });
+
           if (val.finalResult) {
             _showSnackbar('Transkripsi selesai!');
+            _showDialog(
+              'Transkripsi Selesai',
+              _transcription.isNotEmpty
+                  ? 'Hasil transkripsi: $_transcription'
+                  : 'Tidak ada kata yang dikenali.',
+            );
           }
         },
         localeId: 'id_ID',
