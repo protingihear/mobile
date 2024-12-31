@@ -111,6 +111,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
       }
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Profile updated successfully!'),
+      duration: Duration(seconds: 2),
+    ),
+  );
   }
 
   @override
