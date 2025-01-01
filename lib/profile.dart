@@ -149,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ProfileHeader(
                             profile: profile, onUpdateProfile: _updateProfile),
                         const SizedBox(height: 15),
-                        AccountSettings(emails: profile.emails),
+                        AccountSettings(profile: profile),
                         const SizedBox(height: 8),
                         const FAQAndLogoutButtons(),
                       ],
@@ -249,9 +249,9 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class AccountSettings extends StatefulWidget {
-  final List<String> emails;
+  final UserProfile profile;
 
-  const AccountSettings({Key? key, required this.emails}) : super(key: key);
+  const AccountSettings({Key? key, required this.profile}) : super(key: key);
 
   @override
   State<AccountSettings> createState() => _AccountSettingsState();
@@ -259,6 +259,15 @@ class AccountSettings extends StatefulWidget {
 
 class _AccountSettingsState extends State<AccountSettings> {
   bool _isExpanded = false;
+
+  void _navigateToEditEmailPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditEmailPasswordPage(profile: widget.profile),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -299,10 +308,129 @@ class _AccountSettingsState extends State<AccountSettings> {
           ),
           if (_isExpanded)
             Column(
-              children:
-                  widget.emails.map((email) => EmailRow(email: email)).toList(),
+              children: [
+                for (var email in widget.profile.emails)
+                  Text(email, style: TextStyle(color: Colors.black)),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: _navigateToEditEmailPassword,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text('Edit Email & Password'),
+                ),
+              ],
             ),
         ],
+      ),
+    );
+  }
+}
+
+
+
+class EditEmailPasswordPage extends StatefulWidget {
+  final UserProfile profile;
+
+  const EditEmailPasswordPage({Key? key, required this.profile})
+      : super(key: key);
+
+  @override
+  _EditEmailPasswordPageState createState() => _EditEmailPasswordPageState();
+}
+
+class _EditEmailPasswordPageState extends State<EditEmailPasswordPage> {
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController(
+        text: widget.profile.emails.isNotEmpty
+            ? widget.profile.emails.first
+            : '');
+    passwordController = TextEditingController();
+  }
+
+  Future<void> updateEmailPassword() async {
+  final url = Uri.parse('$baseUrl/api/teman-tuli/${widget.profile.id}/update');
+  print(widget.profile.id);
+  final body = {
+    'email': emailController.text.trim(),
+    'password': passwordController.text.trim(),
+  };
+
+  // Log the payload for debugging
+  print('Updating with body: $body');
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(body),
+    );
+
+    // Log the response for debugging
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      // Assume success response includes updated user data
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email and password updated successfully')),
+      );
+      Navigator.pop(context, true);
+    } else {
+      final errorResponse = json.decode(response.body);
+      throw Exception('Error: ${errorResponse['message'] ?? 'Unknown error'}');
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error updating email or password: $e')),
+    );
+  }
+}
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Email & Password'),
+        backgroundColor: Colors.green,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                  labelText: 'Email', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                  labelText: 'Password', border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: updateEmailPassword,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+              ),
+              child: const Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -423,6 +551,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> updateUserProfile() async {
     final url = Uri.parse('$baseUrl/api/teman-tuli/${widget.profile.id}/update');
+    print(widget.profile.id);
 
     // Extract first and last names
     final nameParts = nameController.text.split(' ');
