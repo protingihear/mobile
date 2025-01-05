@@ -1,10 +1,11 @@
 import 'package:bisadenger/community.dart';
+import 'package:bisadenger/information.dart';
 import 'package:bisadenger/lesson1.dart';
+import 'package:bisadenger/profile.dart';
 import 'package:bisadenger/scanToText.dart';
 import 'package:bisadenger/voice_to_text.dart';
-import 'package:bisadenger/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -17,21 +18,10 @@ class _HomepageState extends State<Homepage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const HomepageContent(),
+    const HomePageContent(),
     const CommunityPage(),
     const ProfilePage(),
   ];
-
-  void initState() {
-    super.initState();
-    _loadUserId();
-  }
-
-  void _loadUserId() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getInt('userId');
-    print("User ID: $userId");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +35,8 @@ class _HomepageState extends State<Homepage> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.language), label: "Relations"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.language), label: "Relations"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
@@ -54,8 +45,9 @@ class _HomepageState extends State<Homepage> {
   }
 }
 
-class HomepageContent extends StatelessWidget {
-  const HomepageContent({Key? key}) : super(key: key);
+// TOP SECTION//
+class HomePageContent extends StatelessWidget {
+  const HomePageContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,165 +59,224 @@ class HomepageContent extends StatelessWidget {
             Stack(
               children: [
                 Container(
-                  height: 140,
+                  height: 170,
                   width: double.infinity,
-                  color: Colors.green.shade100,
+                  color: const Color(0xFFDDFCED),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                Column(
+                  children: [
+                    const SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(
-                              "https://via.placeholder.com/150",
-                            ),
+                          Row(
+                            children: [
+                              // Mengganti gambar kiri dengan "pp.png"
+                              _buildProfileAvatar(
+                                "assets/images/pp.png", // Ganti dengan gambar lokal
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                "Naraya, 20",
+                                style: GoogleFonts.montserrat(
+                                  color: const Color(0xFF062C07),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            "Naraya, 20",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.green,
-                            ),
+                          // Mengganti gambar kanan dengan "logo.png"
+                          _buildProfileAvatar(
+                            "assets/images/logo.png", // Ganti dengan gambar lokal
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        radius: 22,
-                        backgroundImage: NetworkImage(
-                          "https://via.placeholder.com/150",
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 10),
+                      child: Text(
+                        "Selamat Datang Naraya\nYuk Jelajahi Dunia Tuli Bersama!",
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.montserrat(
+                          color: const Color(0xFF062C07),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    // TOP SECTION//
+
+//SCAN AND LESSON SECTION//
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0,
+                          vertical:
+                              25.0), // Tambahkan padding vertikal dan horizontal
+                      child: SingleChildScrollView(
+                        scrollDirection:
+                            Axis.horizontal, // Membuat scroll horizontal
+                        child: Row(
+                          children: [
+                            FeatureButton(
+                              iconPath: "assets/images/ImageScan.png",
+                              label: "Scan to Text",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CameraScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                            FeatureButton(
+                              iconPath: "assets/images/VoiceToText.png",
+                              label: "Voice to Text",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => VoiceToTextScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                            FeatureButton(
+                              iconPath: "assets/images/Lesson.png",
+                              label: "Lesson",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Lesson1Page(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+//SCAN AND LESSON SECTION//
+
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      child: Text(
+                        "Information",
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.montserrat(
+                          color: const Color(0xFF000000),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 180, // Tinggi container keseluruhan
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        children: [
+                          InfoCard(
+                            imagePath: "assets/images/Informan1.png",
+                            title:
+                                "Cerita Inspiratif Nadya, Wisudawan Teman Tuli yang Lulus Cepat dan Cum Laude dari ITS",
+                          ),
+                          InfoCard(
+                            imagePath: "assets/images/Informan2.png",
+                            title:
+                                "Kisah Hanif, Teman Tuli yang Mendapat Beasiswa LPDP-Dirikan Yayasan Difabel",
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Selamat Datang Naraya\nYuk Jelajahi Dunia Tuli Bersama!",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _buildFeatureCard(
-                    context,
-                    "Image Scan",
-                    Icons.image,
-                    Colors.blue,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CameraScreen()),
-                      );
-                    },
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    "Voice to Text",
-                    Icons.mic,
-                    Colors.orange,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => VoiceToTextScreen()),
-                      );
-                    },
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    "Lesson",
-                    Icons.book,
-                    Colors.purple,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Lesson1Page()),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Information",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            _buildInfoCard("assets/images/Informan1.png"),
-            _buildInfoCard("assets/images/Informan2.png"),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildFeatureCard(BuildContext context, String title, IconData icon,
-      Color color, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 50, color: color),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-            ],
-          ),
+  Widget _buildProfileAvatar(String imageUrl) {
+    return Container(
+      height: 45,
+      width: 45,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+        ),
+        border: Border.all(
+          color: Colors.black,
+          style: BorderStyle.solid,
+          width: 2,
         ),
       ),
     );
   }
+}
 
-  Widget _buildInfoCard(String imagePath) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+//ICON PATH//
+class FeatureButton extends StatelessWidget {
+  final String iconPath;
+  final String label;
+  final VoidCallback onTap;
+
+  const FeatureButton({
+    Key? key,
+    required this.iconPath,
+    required this.label,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 135,
+        height: 160, // Tinggi container disesuaikan
+        margin:
+            const EdgeInsets.symmetric(horizontal: 10), // Gap antar container
+        decoration: BoxDecoration(
+          color: const Color(0xFF1F6D80),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: double.infinity,
-              height: 150,
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
+            Image.asset(
+              iconPath,
+              width: 60, // Ukuran gambar diperbesar
+              height: 60, // Tinggi gambar diperbesar
+            ),
+            const SizedBox(height: 12), // Jarak antara gambar dan teks
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
           ],
@@ -234,3 +285,78 @@ class HomepageContent extends StatelessWidget {
     );
   }
 }
+//ICON PATH//
+
+//NEWS PATH//
+class InfoCard extends StatelessWidget {
+  final String imagePath;
+  final String title;
+
+  const InfoCard({
+    Key? key,
+    required this.imagePath,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Navigasi ke halaman Information dengan parameter title dan imagePath
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InformationPage(),
+          ),
+        );
+      },
+      child: Container(
+        width: 300, // Lebar kartu agar seragam
+        margin: const EdgeInsets.only(right: 15), // Jarak antar kartu
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 204, 233, 246),
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  Colors.grey.withOpacity(0.3), // Bayangan agar terlihat elegan
+              blurRadius: 5,
+              offset: const Offset(0, 3), // Arah bayangan
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(15)),
+              child: Image.asset(
+                imagePath,
+                height: 120, // Tinggi gambar proporsional
+                width: double.infinity,
+                fit: BoxFit.cover, // Menyesuaikan gambar dengan area
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                title,
+                style: GoogleFonts.montserrat(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                maxLines: 2, // Maksimal 2 baris
+                overflow: TextOverflow
+                    .ellipsis, // Tambahkan "..." jika teks terlalu panjang
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//NEWS PATH//
