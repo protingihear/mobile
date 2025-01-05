@@ -1,12 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:bisadenger/home_page.dart';
 import 'package:bisadenger/information.dart';
 import 'package:bisadenger/lesson1.dart';
 import 'package:bisadenger/sign_in.dart';
-import 'package:flutter/material.dart';
-import 'profile.dart';
-import 'voice_to_text.dart';
-// Import the Image to Text screen
-import 'community.dart';
+import 'package:bisadenger/profile.dart';
+import 'package:bisadenger/voice_to_text.dart';
+import 'package:bisadenger/community.dart';
+import 'package:bisadenger/information.dart';
+import 'package:bisadenger/post_information.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: Sign_In_Page(),
+      home: InformationPage(),
     );
   }
 }
@@ -39,7 +40,6 @@ class HomeScreen extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                // Navigate to Voice to Text Screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => VoiceToTextScreen()),
@@ -47,21 +47,9 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Voice to Text'),
             ),
-            /*SizedBox(height: 20), // Add some spacing between buttons
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Navigate to Image to Text Screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RealTimeOCRScreen()),
-                );
-              },
-              child: Text('Image to Text'),
-            ),*/
-            SizedBox(height: 20), // Add some spacing between buttons
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to Image to Text Screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Homepage()),
@@ -98,10 +86,19 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Information Page'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PostInformationPage()),
+                );
+              },
+              child: Text('PostInformation Page'),
+            ),
           ],
         ),
       ),
     );
   }
 }
-
