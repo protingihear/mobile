@@ -20,14 +20,16 @@ class _Lesson1PageState extends State<Lesson1Page> {
 
   Future<void> fetchLessons() async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:3000/categories'));
+      final response =
+          await http.get(Uri.parse('http://10.0.2.2:3000/categories'));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
           lessons = data.map((item) {
             return {
               'title': item['name'],
-              'words': item['description'], // Menggunakan description sebagai pengganti jumlah kata
+              'words': item[
+                  'description'], // Menggunakan description sebagai pengganti jumlah kata
               'progress': 0.5, // Contoh nilai progress default
               'icon': Icons.category, // Ikon default untuk semua kategori
             };
@@ -82,7 +84,7 @@ class _Lesson1PageState extends State<Lesson1Page> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       image: const DecorationImage(
-                        image: NetworkImage('https://via.placeholder.com/400x200'),
+                        image: AssetImage('assets/images/background_lesson1.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -170,7 +172,8 @@ class _Lesson1PageState extends State<Lesson1Page> {
                                     const SizedBox(height: 8),
                                     Text(
                                       lesson['words'],
-                                      style: const TextStyle(color: Colors.grey),
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                     ),
                                     const SizedBox(height: 8),
                                     LinearProgressIndicator(
