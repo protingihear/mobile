@@ -98,20 +98,6 @@ class _Lesson2PageState extends State<Lesson2Page> {
               ),
             ),
             SizedBox(height: 20),
-            // Search bar
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Cari kategori yang kamu suka!',
-                prefixIcon: Container(
-                  padding: EdgeInsets.all(8.0),
-                  child: Image.asset('assets/images/Icon.png', width: 24, height: 24),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
             // Menampilkan data menggunakan FutureBuilder
             Expanded(
               child: FutureBuilder<List<dynamic>>(
