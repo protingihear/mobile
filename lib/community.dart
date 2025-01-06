@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:bisadenger/chatRelasi.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -62,7 +64,7 @@ class _CommunityPageState extends State<CommunityPage> {
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
                       prefixIcon: Icon(Icons.search, color: Colors.blue),
                       border: InputBorder.none,
-                      // contentPadding: EdgeInsets.symmetric(vertical: 10),
+                      // kontenPostinganPadding: EdgeInsets.symmetric(vertical: 10),
                     ),
                   ),
                 ),
@@ -100,7 +102,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 ),
               ),
 
-              // Button Community dan Menu MyActivity (BELUM FIX)
+              // Button Community dan Menu MyActivity
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Container(
@@ -282,111 +284,154 @@ class _LikeButtonState extends State<LikeButton> {
   }
 }
 
-// SUB PAGE COMMUNITY
-class PostList extends StatelessWidget {
-  final List<Map<String, dynamic>> posts = [
-    {
-      "name": "Yazid Al Adnan",
-      "content":
-          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
-      "likes": 10,
-      "comments": 2
-    },
-    {
-      "name": "Yazid Al Adnan",
-      "content":
-          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
-      "likes": 15,
-      "comments": 3
-    },
-    {
-      "name": "Yazid Al Adnan",
-      "content":
-          "Hari ini saya telah belajar gerakan bahasa isyarat di tempat A loh. Disitu biayanya tergolong murah loh.",
-      "likes": 15,
-      "comments": 3
-    },
-    // Add more posts if needed
-  ];
+List<Map<String, dynamic>> posts = [];
 
-  PostList({super.key});
+// SUB PAGE COMMUNITY
+class PostList extends StatefulWidget {
+  const PostList({super.key});
+
+  @override
+  _PostListState createState() => _PostListState();
+}
+
+class _PostListState extends State<PostList> {
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPosts();
+  }
+
+  Future<void> fetchPosts() async {
+    final url = Uri.parse('http://localhost:8000/api/postingan');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          posts = data.map((e) => e as Map<String, dynamic>).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load posts');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Garis pemisah laman menu Button Community dan Menu MyActivity
-        const SizedBox(height: 5),
-        const Divider(
-          color: Colors.grey,
-          thickness: 1,
-          indent: 1,
-          endIndent: 1,
-        ),
-        Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(20),
-            itemCount: posts.length,
-            itemBuilder: (context, index) {
-              final post = posts[index];
-              return Column(
-                children: [
-                  Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    color: const Color(0xFFDEF5E4),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const CircleAvatar(
-                                backgroundColor: Color(0xFFED9A82),
-                                radius: 20,
-                                child: Icon(Icons.person, color: Colors.white),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                post["name"],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Column(
+            children: [
+              const SizedBox(height: 5),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+                indent: 1,
+                endIndent: 1,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(20),
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts[index];
+                    final String imageUrl =
+                        'http://localhost:8000/storage/${post["image"]}';
+
+                    print('Loading image: $imageUrl'); // Debug log
+                    return Column(
+                      children: [
+                        Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          color: const Color(0xFFDEF5E4),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const CircleAvatar(
+                                      backgroundColor: Color(0xFFED9A82),
+                                      radius: 20,
+                                      child: Icon(Icons.person,
+                                          color: Colors.white),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      post["username"] ?? '',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 10),
+                                Text(post["kontenPostingan"] ?? ''),
+                                const SizedBox(height: 10),
+                                post["image"] != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.network(
+                                          post['image'] != null
+                                              ? 'http://localhost:8000/storage/${post["image"]}'
+                                              : 'https://via.placeholder.com/150', // Gambar placeholder jika field kosong
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return const Text(
+                                              'Image not available',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.favorite,
+                                        color: Colors.green),
+                                    const SizedBox(width: 5),
+                                    Text(post["likes"]?.toString() ?? '0'),
+                                    const SizedBox(width: 20),
+                                    const Icon(Icons.comment,
+                                        color: Colors.green),
+                                    const SizedBox(width: 5),
+                                    Text(post["comments"]?.toString() ?? '0'),
+                                    const SizedBox(width: 20),
+                                    const Icon(Icons.share,
+                                        color: Colors.green),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 10),
-                          Text(post["content"]),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Icon(Icons.favorite, color: Colors.green),
-                              const SizedBox(width: 5),
-                              Text(post["likes"].toString()),
-                              const SizedBox(width: 20),
-                              const Icon(Icons.comment, color: Colors.green),
-                              const SizedBox(width: 5),
-                              Text(post["comments"].toString()),
-                              const SizedBox(width: 20),
-                              const Icon(Icons.share, color: Colors.green),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ],
-    );
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
   }
 }
 
@@ -459,7 +504,7 @@ class _SubPageRelasiState extends State<SubPageRelasi> {
                     });
                   },
                   child: Icon(
-                    Icons.add,
+                    Icons.chat,
                     size: 30,
                     color: selectedIndexSubPage == 0
                         ? Colors.blue // Warna saat dipilih
@@ -473,7 +518,7 @@ class _SubPageRelasiState extends State<SubPageRelasi> {
                     });
                   },
                   child: Icon(
-                    Icons.chat,
+                    Icons.add,
                     size: 30,
                     color: selectedIndexSubPage == 1
                         ? Colors.blue // Warna saat dipilih
@@ -557,6 +602,70 @@ class BaganAktivitas extends StatelessWidget {
   }
 }
 
+// class BaganRelasiStart extends StatefulWidget {
+//   const BaganRelasiStart({super.key});
+
+//   @override
+//   State<BaganRelasiStart> createState() => _BaganRelasiStartState();
+// }
+
+// class _BaganRelasiStartState extends State<BaganRelasiStart> {
+//   // Fungsi untuk menangani navigasi ke laman ChatRelasi
+//   void _navigateToChat(BuildContext context, String name) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => CommunityPostPage(),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: Padding(
+//         padding: const EdgeInsets.only(top: 20),
+//         child: ListView(
+//           children: [
+//             GestureDetector(
+//               onTap: () => _navigateToChat(context, "Puri Lalita Anagata"),
+//               child: const ActivityItem(
+//                 name: "Puri Lalita Anagata",
+//                 message: "Hai Naraya",
+//                 time: "09.00",
+//                 isOnline: true,
+//                 imagePath: "assets/images/avatar1.png",
+//                 unreadCount: 1,
+//               ),
+//             ),
+//             GestureDetector(
+//               onTap: () => _navigateToChat(context, "Fajar Mufid"),
+//               child: const ActivityItem(
+//                 name: "Fajar Mufid",
+//                 message: "Kabarku baik",
+//                 time: "10.00",
+//                 isOnline: true,
+//                 imagePath: "assets/images/avatar2.png",
+//               ),
+//             ),
+//             GestureDetector(
+//               onTap: () => _navigateToChat(context, "Arga Adolf"),
+//               child: const ActivityItem(
+//                 name: "Arga Adolf",
+//                 message: "Aku distasiun",
+//                 time: "10.00",
+//                 isOnline: false,
+//                 imagePath: "assets/images/avatar3.png",
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class BaganRelasiStart extends StatefulWidget {
   const BaganRelasiStart({super.key});
 
@@ -565,59 +674,126 @@ class BaganRelasiStart extends StatefulWidget {
 }
 
 class _BaganRelasiStartState extends State<BaganRelasiStart> {
-  // Fungsi untuk menangani navigasi ke laman ChatRelasi
-  void _navigateToChat(BuildContext context, String name) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CommunityPostPage(),
-      ),
-    );
+  List<dynamic> chatItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchChats();
+  }
+
+  Future<void> fetchChats() async {
+    final url = Uri.parse(
+        'http://localhost:8000/api/chat'); // Sesuaikan dengan URL API Anda
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          chatItems = json.decode(response.body);
+        });
+      } else {
+        print('Failed to load chats');
+      }
+    } catch (error) {
+      print('Error fetching chats: $error');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: ListView(
-          children: [
-            GestureDetector(
-              onTap: () => _navigateToChat(context, "Puri Lalita Anagata"),
-              child: const ActivityItem(
-                name: "Puri Lalita Anagata",
-                message: "Hai Naraya",
-                time: "09.00",
-                isOnline: true,
-                imagePath: "assets/images/avatar1.png",
-                unreadCount: 1,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => _navigateToChat(context, "Fajar Mufid"),
-              child: const ActivityItem(
-                name: "Fajar Mufid",
-                message: "Kabarku baik",
-                time: "10.00",
-                isOnline: true,
-                imagePath: "assets/images/avatar2.png",
-              ),
-            ),
-            GestureDetector(
-              onTap: () => _navigateToChat(context, "Arga Adolf"),
-              child: const ActivityItem(
-                name: "Arga Adolf",
-                message: "Aku distasiun",
-                time: "10.00",
-                isOnline: false,
-                imagePath: "assets/images/avatar3.png",
-              ),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text("Chats"),
       ),
+      body: chatItems.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: chatItems.length,
+              itemBuilder: (context, index) {
+                final chat = chatItems[index];
+                return FutureBuilder(
+                  future: fetchLastMessage(chat['id']),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return ListTile(
+                        title: Text("Loading..."),
+                      );
+                    }
+
+                    final lastMessage = snapshot.data as Map<String, dynamic>;
+
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.purple.shade100,
+                        child: Text(
+                          chat['user1_id']
+                              .toString(), // Bisa diganti sesuai data
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      title: Text(
+                        "${chat['username']}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle:
+                          Text(lastMessage['content'] ?? "No messages yet"),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            lastMessage['sent_at']?.toString() ??
+                                "Unknown time",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          if (lastMessage['status'] == 'unread')
+                            Container(
+                              margin: EdgeInsets.only(top: 4),
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                "1",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      onTap: () {
+                        // Navigate to chatRelasi.dart
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CommunityPostPage()),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
     );
+  }
+
+  Future<Map<String, dynamic>> fetchLastMessage(int chatId) async {
+    // final url = Uri.parse('http://localhost:8000/api/message?chat_id=$chatId');
+    final url = Uri.parse('http://localhost:8000/api/message?chat_id=$chatId');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final messages = json.decode(response.body) as List;
+        if (messages.isNotEmpty) {
+          return messages.last;
+        }
+      }
+    } catch (error) {
+      print('Error fetching last message: $error');
+    }
+    return {};
   }
 }
 
