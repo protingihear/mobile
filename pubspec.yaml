@@ -13,6 +13,8 @@ dependencies:
   speech_to_text: ^7.0.0 # For voice-to-text functionality
   permission_handler: ^10.2.0 # or the latest version
   file_picker: ^8.1.7
+  bottom_picker: ^2.9.0
+  intl: ^0.20.1
  
   http: any
   url_launcher: any
@@ -40,6 +42,8 @@ flutter:
     - assets/imagesComm/
     - assets/images/VoiceToText.png
     - assets/images/ImageScan.png
+    - assets/images/Informan1.png
+    - assets/images/Informan2.png
     # - assets/images/Information.png
     # - assets/images/Post_Information.png
     - assets/images/Lesson.png
