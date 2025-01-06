@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: InformationPage(),
+      // home: InformationPage(),
+      home: Sign_In_Page(),
     );
   }
 }
