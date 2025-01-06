@@ -34,11 +34,11 @@ class _InformationPageState extends State<InformationPage> {
     }
   }
 
-  void toggleMenu(int index) {
-    setState(() {
-      menuVisible[index] = !(menuVisible[index] ?? false);
-    });
-  }
+  // void toggleMenu(int index) {
+  //   setState(() {
+  //     menuVisible[index] = !(menuVisible[index] ?? false);
+  //   });
+  // }
 
   Future<void> handleDelete(int id) async {
     try {
@@ -93,7 +93,9 @@ class _InformationPageState extends State<InformationPage> {
                   final newInformation = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PostInformationPage()),
+                        builder: (context) => PostInformationPage(
+                              selectedIndex: -1,
+                            )),
                   );
                   if (newInformation != null) {
                     // Jika data baru dikembalikan, tambahkan ke daftar
@@ -107,7 +109,7 @@ class _InformationPageState extends State<InformationPage> {
                   ? GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.8,
+                        childAspectRatio: 1.0,
                       ),
                       itemCount: newsData.length,
                       itemBuilder: (context, index) {
@@ -119,18 +121,6 @@ class _InformationPageState extends State<InformationPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(8)),
-                                child: Image.network(
-                                  news['image'] != null
-                                      ? 'http://localhost:8000/storage/${news['image']}'
-                                      : 'https://via.placeholder.com/300x150',
-                                  height: 120,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -142,7 +132,7 @@ class _InformationPageState extends State<InformationPage> {
                                           color: Colors.green, fontSize: 12),
                                     ),
                                     Text(
-                                      '${news['uploadDate']} ${news['uploadTime']}',
+                                      '${news['upload_date']} ${news['upload_time']}',
                                       style: TextStyle(
                                           color: Colors.grey, fontSize: 12),
                                     ),
@@ -162,32 +152,53 @@ class _InformationPageState extends State<InformationPage> {
                               ),
                               Align(
                                 alignment: Alignment.topRight,
-                                child: IconButton(
-                                  icon: Icon(Icons.more_vert),
-                                  onPressed: () => toggleMenu(index),
-                                ),
-                              ),
-                              if (menuVisible[index] == true)
-                                PopupMenuButton(
-                                  onSelected: (value) {
-                                    if (value == 'edit') {
-                                      Navigator.pushNamed(context,
-                                          '/edit_information/${news['id']}');
-                                    } else if (value == 'delete') {
-                                      handleDelete(news['id']);
-                                    }
+                                child: MenuAnchor(
+                                  builder: (
+                                    BuildContext context,
+                                    MenuController controller,
+                                    Widget? child,
+                                  ) {
+                                    return IconButton(
+                                      onPressed: () {
+                                        if (controller.isOpen) {
+                                          controller.close();
+                                        } else {
+                                          controller.open();
+                                        }
+                                      },
+                                      icon: const Icon(Icons.more_vert),
+                                    );
                                   },
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      value: 'edit',
-                                      child: Text('Edit'),
+                                  menuChildren: [
+                                    MenuItemButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                PostInformationPage(
+                                              selectedIndex: news['id'],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Edit',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
                                     ),
-                                    PopupMenuItem(
-                                      value: 'delete',
-                                      child: Text('Delete'),
-                                    ),
+                                    MenuItemButton(
+                                      onPressed: () {
+                                        handleDelete(news['id']);
+                                      },
+                                      child: const Text(
+                                        'Delete',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    )
                                   ],
                                 ),
+                              ),
                             ],
                           ),
                         );
