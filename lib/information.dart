@@ -87,7 +87,7 @@ class _InformationPageState extends State<InformationPage> {
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
-                icon: Icon(Icons.more_horiz),
+                icon: Icon(Icons.add),
                 onPressed: () async {
                   // Navigasi ke PostInformationPage dan tunggu hasilnya
                   final newInformation = await Navigator.push(

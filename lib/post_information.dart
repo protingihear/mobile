@@ -189,32 +189,50 @@ class _PostInformationPageState extends State<PostInformationPage> {
     } else {
       print(form);
       try {
-        final url = Uri.parse('http://localhost:8000/api/information');
-        final formattedDate =
-            DateFormat('dd-MMM-yyyy').parse(form['upload_date']!);
-        final formattedTime = form['upload_time']! + ":00";
+        // Tentukan URL dan metode
+        final isEditing = widget.selectedIndex != -1;
+        final url = isEditing
+            ? Uri.parse(
+                'http://localhost:8000/api/information/${widget.selectedIndex}')
+            : Uri.parse('http://localhost:8000/api/information');
+        final method = isEditing ? 'PUT' : 'POST';
 
-        print("${formattedDate}  aaaa $formattedTime");
+        // Pastikan tanggal dan waktu tetap jika tidak diubah
+        String uploadDate = form['upload_date']!.isEmpty
+            ? DateFormat('yyyy-MM-dd')
+                .format(DateTime.now()) // Gunakan default jika kosong
+            : form['upload_date']!;
+        String uploadTime = form['upload_time']!.isEmpty
+            ? DateFormat('HH:mm:ss')
+                .format(DateTime.now()) // Gunakan default jika kosong
+            : DateFormat('HH:mm:ss')
+                .format(DateFormat('HH:mm').parse(form['upload_time']!));
+
         final Map<String, dynamic> requestData = {
           'source': form['source'],
-          'upload_date': formattedDate.toIso8601String().split('T').first,
-          'upload_time': formattedTime,
+          'upload_date': uploadDate,
+          'upload_time': uploadTime,
           'title': form['title'],
           'content': form['content'],
         };
 
-        final response = await http.post(
-          url,
-          headers: {
+        // Kirim permintaan HTTP
+        final response = await http.Request(method, url)
+          ..headers.addAll({
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-          },
-          body: json.encode(requestData),
-        );
+          })
+          ..body = json.encode(requestData);
 
-        if (response.statusCode == 200 || response.statusCode == 201) {
+        final streamedResponse = await response.send();
+        final responseBody = await streamedResponse.stream.bytesToString();
+
+        if (streamedResponse.statusCode == 200 ||
+            streamedResponse.statusCode == 201) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Berhasil menyimpan data!')),
+            SnackBar(
+                content: Text(
+                    'Berhasil ${isEditing ? "mengedit" : "menyimpan"} data!')),
           );
           Navigator.pushReplacement(
             context,
@@ -222,7 +240,7 @@ class _PostInformationPageState extends State<PostInformationPage> {
           );
         } else {
           throw Exception(
-              "status code:${response.statusCode} response headers: ${response.headers}, response body:${response.body}");
+              "Status code: ${streamedResponse.statusCode}, response body: $responseBody");
         }
       } catch (error) {
         print('Error submitting data: $error');
@@ -230,8 +248,6 @@ class _PostInformationPageState extends State<PostInformationPage> {
           SnackBar(content: Text('Terjadi kesalahan: $error')),
         );
       }
-
-      // end try
     }
   }
 
@@ -344,6 +360,15 @@ class _PostInformationPageState extends State<PostInformationPage> {
               ElevatedButton(
                 onPressed: handleSubmit,
                 child: Text('Simpan'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InformationPage()),
+                  );
+                },
+                child: Text('Kembali'),
               ),
             ],
           ),

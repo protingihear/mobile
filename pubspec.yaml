@@ -13,6 +13,8 @@ dependencies:
   speech_to_text: ^7.0.0 # For voice-to-text functionality
   permission_handler: ^10.2.0 # or the latest version
   file_picker: ^8.1.7
+  bottom_picker: ^2.0.0 # Gunakan versi terbaru atau yang sesuai
+  intl: ^0.18.0         # Gunakan versi terbaru atau yang sesuai
  
   http: any
   url_launcher: any

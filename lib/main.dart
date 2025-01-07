@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: Sign_In_Page(),
+      home: InformationPage(),
     );
   }
 }
@@ -88,11 +88,11 @@ class HomeScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PostInformationPage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => PostInformationPage()),
+                // );
               },
               child: Text('PostInformation Page'),
             ),
